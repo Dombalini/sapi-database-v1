@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="8984dd41-2e4d-4c9c-9746-3ffedad99f84" />
+<!-- [STUDIO:"update-user-by-id-SubFlow"]	<sub-flow name="update-user-by-id-SubFlow" doc:id="7a6ecb30-8a83-422d-9d79-2ce87f202d8a" >
+		<logger level="INFO" doc:name="start Log payload HTTP-put\users\{id}:sapi-database " doc:id="213ccaa9-1663-4da6-9b76-2a71a0c72539" message="start Log payload HTTP-put:\users\{id}:sapi-database  #[payload&#93;" />
+<flow-ref doc:name="update-user-by-id-variables-SubFlow" doc:id="e09cea51-2937-4bd8-8adb-f7bde56664fa" name="update-user-by-id-variables-SubFlow"/>
+		<db:update doc:name="Update user by id" doc:id="7aa1e74e-a487-47d0-8cbd-c534572e2b8c" config-ref="Database_Config_User">
+			<error-mapping targetType="CUSTOM:USER_NOT_FOUND" />
+				<db:sql><![CDATA[#[vars.setUpdateSqlQuerry&#93;&#93;&#93;></db:sql>
+			<db:input-parameters><![CDATA[#[{
+	     email: payload.email,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        manager_id: payload.manager_id,
+        street: payload.street,
+        city: payload.city,
+        dob: payload.dob,
+        id: attributes.uriParams.Id
+}&#93;&#93;&#93;></db:input-parameters>
+		</db:update>
+		<choice doc:name="Choice" doc:id="7124c551-f3f5-43df-bbcf-ec4f38a5dc00" >
+			<when expression="#[sizeOf(payload) &gt; 0&#93;">
+				<ee:transform doc:name="output Payload" doc:id="8077a539-8655-423e-a88e-85d2e30979e0">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+&#45;&#45;-
+{
+    "message": "User data updated successfully"
+}&#93;&#93;></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise >
+				<set-variable value="404" doc:name="httpStatus" doc:id="22c081c2-5ed4-4f36-8b49-3b969562fd05" variableName="httpStatus" />
+				<ee:transform doc:name="output Payload" doc:id="799c9613-d511-43a3-a4e3-4100bde79376">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+&#45;&#45;-
+{
+	"message" : "User not found"
+}&#93;&#93;></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="end Log payload HTTP-get:\users\{id}:sapi-database" doc:id="3a8828db-59da-4f5a-958c-2b3725b46eed" message="end Log payload HTTP-get:\users\{id}:sapi-database #[payload&#93;" />
+	</sub-flow> [STUDIO] -->
+<!-- [STUDIO:"update-user-by-id-variables-SubFlow"]	<sub-flow name="update-user-by-id-variables-SubFlow" doc:id="36b6d320-94d7-41cd-b326-75c76c5e973c" >
+		<set-variable value='#[attributes.uriParams."Id"&#93;' doc:name="id" doc:id="968d9d36-09c1-4192-b864-c276cbb1f634" variableName="id" />
+		<set-variable value='#["UPDATE user&#10;        SET&#10;            email = :email,&#10;            firstName = :firstName,&#10;            lastName = :lastName,&#10;            manager_id = :manager_id,&#10;            street = :street,&#10;            city = :city,&#10;            dob = :dob,&#10;            updated_at = NOW()&#10;        WHERE&#10;            id = :id;"&#93;' doc:name="setUpdateSqlQuerry" doc:id="8fc63dce-7841-4aa6-9b25-adf30b4e2a93" variableName="setUpdateSqlQuerry" />
+	</sub-flow> [STUDIO] -->
+</mule>

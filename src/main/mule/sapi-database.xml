@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <http:listener-config name="sapi-database-httpListenerConfig" basePath="${api.basePath}">
+        <http:listener-connection host="0.0.0.0" port="${http.port}" />
+    </http:listener-config>
+    <apikit:config name="sapi-database-config" api="resource::115c39c2-b285-45ab-a930-0148acd0cf51:sapi-database:1.0.1:raml:zip:sapi-database.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="sapi-database-main">
+        <http:listener config-ref="sapi-database-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="sapi-database-config" />
+    </flow>
+    <flow name="sapi-database-console">
+        <http:listener config-ref="sapi-database-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="sapi-database-config" />
+		<error-handler>
+			<on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="put:\users\(Id):application\json:sapi-database-config">
+<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="Id">attributes.uriParams.'Id'</ee:set-variable>
+            </ee:variables>
+        </ee:transform> [STUDIO] -->
+<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+&#45;&#45;-
+{
+  message: "User Successfully Updated"
+}&#93;&#93;></ee:set-payload>
+            </ee:message>
+        </ee:transform> [STUDIO] -->
+		<flow-ref doc:name="update-user-by-id-SubFlow" doc:id="cf45461e-d4ad-44c5-b2fe-748dc901f2e1" name="update-user-by-id-SubFlow"/>
+    </flow>
+    <flow name="delete:\users\(Id):sapi-database-config">
+<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="Id">attributes.uriParams.'Id'</ee:set-variable>
+            </ee:variables>
+        </ee:transform> [STUDIO] -->
+<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+&#45;&#45;-
+{
+  message: "User not found"
+}&#93;&#93;></ee:set-payload>
+            </ee:message>
+        </ee:transform> [STUDIO] -->
+		<flow-ref doc:name="delete-user-by-id-api-SubFlow" doc:id="440afa3f-a68d-4f93-a1a6-92296b2514dc" name="delete-user-by-id-api-SubFlow"/>
+    </flow>
+    <flow name="get:\users:sapi-database-config">
+<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+&#45;&#45;-
+[
+  {
+    id: 1,
+    email: "kruno@net.hr",
+    firstName: "kruno",
+    LastName: "krainovic",
+    manager_id: 1,
+    address: {
+      street: "Vukovarska 120",
+      city: "Vinkovci"
+    },
+    dob: "8/08/1988",
+    updated_at: "2021-11-26 12:27:16",
+    initials: "KK"
+  }
+&#93;&#93;&#93;></ee:set-payload>
+            </ee:message>
+        </ee:transform> [STUDIO] -->
+		<flow-ref doc:name="get-users-api-Flow" doc:id="50db31cb-049f-4bde-afa6-eca5eae2d44a" name="get-users-api-Flow"/>
+    </flow>
+    <flow name="get:\users\(Id):sapi-database-config">
+<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="Id">attributes.uriParams.'Id'</ee:set-variable>
+            </ee:variables>
+        </ee:transform> [STUDIO] -->
+<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+&#45;&#45;-
+{
+  id: 1,
+  email: "kruno@net.hr",
+  firstName: "kruno",
+  lastName: "krainovic",
+  manager_id: 1,
+  address: {
+    street: "Vukovarska 120",
+    city: "Vinkovci"
+  },
+  dob: "1988-08-08",
+  updated_at: "2021-11-26T12:27:16.000Z",
+  initials: "KK"
+}&#93;&#93;></ee:set-payload>
+            </ee:message>
+        </ee:transform> [STUDIO] -->
+		<flow-ref doc:name="get-user-by-id-api-SubFlow" doc:id="27d63303-c489-4e18-919b-a3029d46a14b" name="get-user-by-id-api-SubFlow"/>
+    </flow>
+    <flow name="post:\users:application\json:sapi-database-config">
+<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+&#45;&#45;-
+{
+  message: "User Successfully Created"
+}&#93;&#93;></ee:set-payload>
+            </ee:message>
+        </ee:transform> [STUDIO] -->
+		<flow-ref doc:name="create-user-api-SubFlow" doc:id="a78ad722-0229-47d5-9931-cb5c7d3a53fd" name="create-user-api-SubFlow"/>
+    </flow>
+    
+</mule>
