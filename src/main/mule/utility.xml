@@ -11,7 +11,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<flow-ref doc:name="transform-message-output-payload" doc:id="ef394e80-937e-428b-9cfd-6b623c866be3" name="transform-message-output-payload"/>
 			</when>
 			<otherwise >
-				<raise-error doc:name="Raise error" doc:id="efe829df-fcb6-49ea-9ff6-5207d405a98d" type="CUSTOM:USER_NOT_FOUND" />
+				<raise-error doc:name="CUSTOM:USER_NOT_FOUND" doc:id="efe829df-fcb6-49ea-9ff6-5207d405a98d" type="CUSTOM:USER_NOT_FOUND" />
 			</otherwise>
 		</choice>
 	</sub-flow>
