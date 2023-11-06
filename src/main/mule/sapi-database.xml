@@ -43,107 +43,21 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\users\(Id):application\json:sapi-database-config">
-<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
-            <ee:variables>
-                <ee:set-variable variableName="Id">attributes.uriParams.'Id'</ee:set-variable>
-            </ee:variables>
-        </ee:transform> [STUDIO] -->
-<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
-&#45;&#45;-
-{
-  message: "User Successfully Updated"
-}&#93;&#93;></ee:set-payload>
-            </ee:message>
-        </ee:transform> [STUDIO] -->
 		<flow-ref doc:name="update-user-by-id-SubFlow" doc:id="cf45461e-d4ad-44c5-b2fe-748dc901f2e1" name="update-user-by-id-SubFlow"/>
     </flow>
     <flow name="delete:\users\(Id):sapi-database-config">
-<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
-            <ee:variables>
-                <ee:set-variable variableName="Id">attributes.uriParams.'Id'</ee:set-variable>
-            </ee:variables>
-        </ee:transform> [STUDIO] -->
-<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
-&#45;&#45;-
-{
-  message: "User not found"
-}&#93;&#93;></ee:set-payload>
-            </ee:message>
-        </ee:transform> [STUDIO] -->
 		<flow-ref doc:name="delete-user-by-id-api-SubFlow" doc:id="440afa3f-a68d-4f93-a1a6-92296b2514dc" name="delete-user-by-id-api-SubFlow"/>
     </flow>
     <flow name="get:\users:sapi-database-config">
-<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
-&#45;&#45;-
-[
-  {
-    id: 1,
-    email: "kruno@net.hr",
-    firstName: "kruno",
-    LastName: "krainovic",
-    manager_id: 1,
-    address: {
-      street: "Vukovarska 120",
-      city: "Vinkovci"
-    },
-    dob: "8/08/1988",
-    updated_at: "2021-11-26 12:27:16",
-    initials: "KK"
-  }
-&#93;&#93;&#93;></ee:set-payload>
-            </ee:message>
-        </ee:transform> [STUDIO] -->
+
 		<flow-ref doc:name="get-users-api-Flow" doc:id="50db31cb-049f-4bde-afa6-eca5eae2d44a" name="get-users-api-Flow"/>
     </flow>
     <flow name="get:\users\(Id):sapi-database-config">
-<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
-            <ee:variables>
-                <ee:set-variable variableName="Id">attributes.uriParams.'Id'</ee:set-variable>
-            </ee:variables>
-        </ee:transform> [STUDIO] -->
-<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
-&#45;&#45;-
-{
-  id: 1,
-  email: "kruno@net.hr",
-  firstName: "kruno",
-  lastName: "krainovic",
-  manager_id: 1,
-  address: {
-    street: "Vukovarska 120",
-    city: "Vinkovci"
-  },
-  dob: "1988-08-08",
-  updated_at: "2021-11-26T12:27:16.000Z",
-  initials: "KK"
-}&#93;&#93;></ee:set-payload>
-            </ee:message>
-        </ee:transform> [STUDIO] -->
+
 		<flow-ref doc:name="get-user-by-id-api-SubFlow" doc:id="27d63303-c489-4e18-919b-a3029d46a14b" name="get-user-by-id-api-SubFlow"/>
     </flow>
     <flow name="post:\users:application\json:sapi-database-config">
-<!-- [STUDIO:"Transform Message"]        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
-&#45;&#45;-
-{
-  message: "User Successfully Created"
-}&#93;&#93;></ee:set-payload>
-            </ee:message>
-        </ee:transform> [STUDIO] -->
+
 		<flow-ref doc:name="create-user-api-SubFlow" doc:id="a78ad722-0229-47d5-9931-cb5c7d3a53fd" name="create-user-api-SubFlow"/>
     </flow>
     
