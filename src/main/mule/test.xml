@@ -1,0 +1,109 @@
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="get-users-api-Flow" doc:id="c35b2fec-c3a9-4161-8bce-0d30ce722815" >
+		<choice doc:name="Choice" doc:id="34bf648c-02d4-4afc-86d2-8264835f4762" >
+			<when expression='#[attributes.queryParams."email" != null]' >
+				<logger level="INFO" doc:name="start Log payload HTTP-get:\users:sapi-database by Email" doc:id="29486e6d-320b-4618-8e3b-7a792d911e1b" message="start Log payload HTTP-get:\users:sapi-database #[payload] by Email" />
+				<set-variable value='#["select * from user where email= :email;"]' doc:name="setSelectbyEmailSqlQuerry" doc:id="1e6106fd-c893-4814-8f4f-eb4ef22e8b2d" variableName="setSelectbyEmailSqlQuerry" />
+				<db:select doc:name="Select users by email" doc:id="a907fd81-8051-4e42-8ae9-13d875af4db6" config-ref="Database_Config_User" >
+					<db:sql ><![CDATA[#[vars.setSelectbyEmailSqlQuerry]
+]]></db:sql>
+					<db:input-parameters ><![CDATA[#[{
+email: attributes.queryParams."email"
+}]]]></db:input-parameters>
+				</db:select>
+				<ee:transform doc:name="fail Function" doc:id="8284f165-12bc-40b6-8e63-da323b5ae5bd" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0 
+output application/json
+import * from dw::Runtime
+fun userNotFound(message) = if(payload == [] )
+fail("User Not Found")
+else
+payload
+---
+try(() ->userNotFound(payload))
+]]></ee:set-payload>
+					</ee:message>
+					<ee:variables />
+				</ee:transform>
+				<choice doc:name="Choice" doc:id="af706886-9dfe-4837-bdba-d8319bf86fb9" >
+					<when expression="#[payload.success == true]" >
+						<ee:transform doc:name="output Payload" doc:id="d0cdd6e4-f3aa-4dde-bb98-502d5876346e" >
+							<ee:message >
+								<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.result map ( payload , indexOfPayload ) -> {
+	id:payload.id,
+	email:payload.email,
+	firstName:payload.firstName,
+	lastName:payload.lastName,
+	manager_id:payload.manager_id,
+	street:payload.street,
+	city: payload.city,
+	dob:payload.dob,
+	updated_at:payload.updated_at,
+	initials:payload.initials	
+}]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+					</when>
+					<otherwise>
+						<raise-error doc:name="Raise error" doc:id="c16918df-6e68-4d42-afed-794e3aa3dc95" type="CUSTOM:USER_NOT_FOUND" />
+					
+</otherwise>
+				
+</choice>
+				<logger level="INFO" doc:name="End Log payload HTTP-get:\users:sapi-database by Email" doc:id="516b0e3f-b1de-4adb-b15f-3d55c0b0baf2" message="End Log payload HTTP-get:\users:sapi-database #[payload] by Email" />
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="start Log payload HTTP-get:\users:sapi-database " doc:id="309cace7-4ae6-4c56-b609-82051baf1a43" message="start Log payload HTTP-get:\users:sapi-database #[payload]" />
+				<set-variable value='#["SELECT * FROM 	user;"]' doc:name="setSelectSqlQuerry" doc:id="8db2bf8d-e5ab-435f-82a7-3eedad523b7f" variableName="setSelectSqlQuerry" />
+				<db:select doc:name="Select all users" doc:id="007b840b-de15-401b-a78d-34fc11b7fa02" config-ref="Database_Config_User" >
+					<error-mapping sourceType="DB:QUERY_EXECUTION" targetType="CUSTOM:USER_NOT_FOUND" />
+					<db:sql ><![CDATA[#[vars.setSelectSqlQuerry]]]></db:sql>
+				</db:select>
+				<ee:transform doc:name="output Payload" doc:id="3c0447c1-6336-44e3-915c-a4f8d5488605" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload , indexOfPayload ) -> {
+	id:payload.id,
+	email:payload.email,
+	firstName:payload.firstName,
+	lastName:payload.lastName,
+	manager_id:payload.manager_id,
+	street:payload.street,
+	city: payload.city,
+	dob:payload.dob,
+	updated_at:payload.updated_at,
+	initials:payload.initials	
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="End Log payload HTTP-get:\users:sapi-database" doc:id="28d83027-1d63-48bc-8af4-df24a6ebf730" message="End Log payload HTTP-get:\users:sapi-database #[payload]" />
+			</otherwise>
+		</choice>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7605f467-28da-4717-bb51-2f3892a4cdf5" type="CUSTOM:USER_NOT_FOUND">
+			<ee:transform doc:name="output Payload" doc:id="7e2aa46c-2cfc-4a91-8ac8-b7484b3e4f0f">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "message" : "User not Found"
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<set-variable value="404" doc:name="httpStatus" doc:id="f95a6649-f7cb-4ea2-9f80-f2bcf9215297" variableName="httpStatus" />
+		</on-error-propagate>
+		</error-handler>
+	</flow>
+
+</mule>

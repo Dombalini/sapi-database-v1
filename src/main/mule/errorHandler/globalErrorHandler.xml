@@ -4,9 +4,9 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-	<error-handler name="globalErrorHandler" doc:id="49628b95-2a74-47d1-adc3-8323654dc7c6" >
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1a226c38-9205-4440-9918-b46669ff87a7" type="APIKIT:BAD_REQUEST" >
-			<ee:transform doc:name="Transform Message" doc:id="6a4356a5-892f-4f8b-892b-649cd313c52f" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+	<error-handler name="globalErrorHandler" doc:id="5cd4c5b8-604e-45d9-990a-46b8cdee7681" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="dfacd0c6-e713-41fd-ae18-a29545764810" type="APIKIT:BAD_REQUEST" >
+			<ee:transform doc:name="Transform Message" doc:id="50075165-dc75-4f04-88bd-ce9ac89cfbdc" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
 				<ee:message >
 					<ee:set-payload resource="dataweaves/apikitError.dwl" />
 				</ee:message>
@@ -15,8 +15,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7fd518e3-1581-48f0-a189-91484135fa87" type="APIKIT:NOT_FOUND" >
-			<ee:transform doc:name="Transform Message" doc:id="1c38f0c1-deab-4514-805c-dbe29f6b5f6e" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e032826f-c61b-47f0-bcf1-dfc9fc6caea1" type="APIKIT:NOT_FOUND" >
+			<ee:transform doc:name="Transform Message" doc:id="e6cd1241-f962-459d-9fb1-c7cad7d7ba37" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
 				<ee:message >
 					<ee:set-payload resource="dataweaves/apikitError.dwl" />
 				</ee:message>
@@ -25,8 +25,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="58746767-5333-4728-a29c-c172c5737a68" type="APIKIT:METHOD_NOT_ALLOWED" >
-			<ee:transform doc:name="Transform Message" doc:id="99b43ea2-cdbf-40eb-8727-e0bb200d2aa8" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="32661a2b-92a2-43ca-acd1-76933daeb953" type="APIKIT:METHOD_NOT_ALLOWED" >
+			<ee:transform doc:name="Transform Message" doc:id="fbd1f14a-66cc-463e-85c8-e947fa6191e8" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
 				<ee:message >
 					<ee:set-payload resource="dataweaves/apikitError.dwl" />
 				</ee:message>
@@ -35,8 +35,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="875438db-fd54-42ba-ad69-bbbb4016066d" type="APIKIT:NOT_ACCEPTABLE" >
-			<ee:transform doc:name="Transform Message" doc:id="a53d04e7-3433-4ecb-8bdb-6b1713b1f111" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="ffb94215-fc5c-46e3-8b1d-bc041cdef2f2" type="APIKIT:NOT_ACCEPTABLE" >
+			<ee:transform doc:name="Transform Message" doc:id="1e21fbad-795b-492d-852c-05258e4c3c3e" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
 				<ee:message >
 					<ee:set-payload resource="dataweaves/apikitError.dwl" />
 				</ee:message>
@@ -45,8 +45,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c7d28002-5ef4-4f82-b144-63c6ef0e64e4" type="APIKIT:UNSUPPORTED_MEDIA_TYPE" >
-			<ee:transform doc:name="Transform Message" doc:id="dbdbc48f-6e0b-4e88-a923-1c254f48923f" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="24ae51e8-8a12-4504-a095-c51b1b2e019a" type="APIKIT:UNSUPPORTED_MEDIA_TYPE" >
+			<ee:transform doc:name="Transform Message" doc:id="2099e7c0-ce4c-4012-83d8-ae5ade6fb1c0" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
 				<ee:message >
 					<ee:set-payload resource="dataweaves/apikitError.dwl" />
 				</ee:message>
@@ -55,8 +55,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="3f370ebe-dcb9-45c3-89c2-369ac454d137" type="APIKIT:NOT_IMPLEMENTED" >
-			<ee:transform doc:name="Transform Message" doc:id="c214867a-2d8a-421d-8eae-59c8d11f6849" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="6249d7ab-3b10-43e5-9c10-ddff2c936f2b" type="APIKIT:NOT_IMPLEMENTED" >
+			<ee:transform doc:name="Transform Message" doc:id="41e0dfaa-7c0e-427b-b824-7dfc6575ee86" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
 				<ee:message >
 					<ee:set-payload resource="dataweaves/apikitError.dwl" />
 				</ee:message>
@@ -65,8 +65,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d8c4bacf-70ea-4bb1-80a8-27d362f3c2e5" type="CUSTOM:USER_NOT_FOUND">
-			<ee:transform doc:name="output Payload" doc:id="7374343a-aaa4-4d29-ba51-847c1a947eb7">
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9474dfa5-309f-4092-a550-3905ceef054f" type="CUSTOM:USER_NOT_FOUND">
+			<ee:transform doc:name="output Payload" doc:id="1f705c31-fc1e-4cd2-a48a-8ac33d4bea55">
 				<ee:message>
 					<ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -76,41 +76,41 @@ output application/json
 }]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
-			<set-variable value="404" doc:name="httpStatus" doc:id="1dc73e67-3de0-475b-978e-f6c95e0801b0" variableName="httpStatus" />
+			<set-variable value="404" doc:name="httpStatus" doc:id="8806fadf-56b0-4015-a4d4-64e6dd3e048a" variableName="httpStatus" />
 		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e8be776c-400c-4965-8fd7-1be1afa2001c" type="CUSTOM:USER_NOT_FOUND_DELETE">
-			<set-variable value="404" doc:name="httpStatus" doc:id="9686c2a7-baac-4883-84c7-a728f54c4802" variableName="httpStatus" />
-			<ee:transform doc:name="empty payload" doc:id="48b585ed-79a8-46ef-a884-ab9fa592e639">
+<!-- [STUDIO:"On Error Propagate"]		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="fe4e8501-30f9-483a-8795-2550f7754dd3" type="CUSTOM:USER_NOT_FOUND_DELETE">
+			<set-variable value="404" doc:name="httpStatus" doc:id="6753b568-ed51-4c73-b24c-425bd8c440db" variableName="httpStatus" />
+			<ee:transform doc:name="empty payload" doc:id="2b3542fb-ad1f-4b04-ac9d-8aea5e4c117b">
 				<ee:message>
 					<ee:set-payload><![CDATA[%dw 2.0
 output application/java
----
+&#45;&#45;-
 ""
-]]></ee:set-payload>
+&#93;&#93;></ee:set-payload>
 				</ee:message>
 			</ee:transform>
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2d00ad64-97ba-4915-a97e-a6b532e89126" type="CUSTOM:USER_ALREDY_EXISTS_CREATE">
-			<set-variable value="409" doc:name="httpStatus" doc:id="e4e1fee5-b75a-467d-a32e-ca7f02c05aa1" variableName="httpStatus" />
-			<ee:transform doc:name="set Output" doc:id="e2b4b104-0f96-4c56-8b0d-9b706f1c6c01">
+		</on-error-propagate> [STUDIO] -->
+<!-- [STUDIO:"On Error Propagate"]		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e888fff9-9a22-49b4-8958-71a2e5d6298e" type="CUSTOM:USER_ALREDY_EXISTS_CREATE">
+			<set-variable value="409" doc:name="httpStatus" doc:id="670b578d-35e5-40d0-8e41-affdbbbca562" variableName="httpStatus" />
+			<ee:transform doc:name="set Output" doc:id="6e262279-72a2-4d49-a673-3ff86c41ac91">
 				<ee:message>
 					<ee:set-payload><![CDATA[%dw 2.0
 output application/json
----
+&#45;&#45;-
 {
   "message": "User Already Exist"
 }
-]]></ee:set-payload>
+&#93;&#93;></ee:set-payload>
 				</ee:message>
 			</ee:transform>
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="413a31e0-9ecc-4a23-850b-9e7ce907662f" type="ANY" >
-			<set-variable value="#[%dw 2.0&#10;output application/java&#10;---&#10;vars.httpStatus default 500]" doc:name="Setze httpStatus" doc:id="0b7b48b1-f52e-4fe9-badb-55e5fc7804f1" variableName="httpStatus" />
-			<set-variable value='#[%dw 2.0&#10;output application/json&#10;&#10;var defaultTypes = {&#10;	"400" : "Bad Request",&#10;	"401" : "Unauthorized",&#10;	"403" : "Forbidden",&#10;	"404" : "Resource does not exists",&#10;	"405" : "Method not allowed",&#10;	"406" : "Not acceptable",&#10;	"407" : "Proxy Authentication Required",&#10;	"415" : "Unsupported Request Content Type",&#10;	"422" : "Unprocessible entity",&#10;	"429" : "Too many requests",&#10;	"500" : "Internal Server Error",&#10;	"503" : "Service Unavailable",&#10;	"504" : "Gateway Timeout"&#10;}&#10;&#10;---&#10;vars.httpStatusType default defaultTypes[(vars.httpStatus as String)]]' doc:name="Setze httpStatusType" doc:id="fb8b2355-2f68-4057-b1ce-fff13fcf64bc" variableName="httpStatusType" />
-			<set-variable value="#[%dw 2.0&#10;output application/json&#10;&#10;var defaultMessages = {&#10;	&quot;400&quot; : &quot;Something went wrong. Please try again.&quot;,&#10;	&quot;401&quot; : &quot;No credentials are provided or provided credentials are refused.&quot;,&#10;	&quot;403&quot; : &quot;User is not allowed to perform the requested operation.&quot;,&#10;	&quot;404&quot; : &quot;The requested URI does not map to a resource.&quot;,&#10;	&quot;405&quot; : &quot;A request was made of a resource using a request method not supported by that resource.&quot;,&#10;	&quot;406&quot; : &quot;The requested resource is only capable of generating content not acceptable according to the Accept headers sent in the request.&quot;,&#10;	&quot;407&quot; : &quot;The client must first authenticate itself with the proxy.&quot;,&#10;	&quot;415&quot; : &quot;The client sent a type of request which is not support by the requested endpoint. Check your request's Content-type machtes the requested endpoint accepted content type.&quot;,&#10;	&quot;422&quot; : &quot;The request was well-formed but was unable to be followed due to semantic errors in the input.&quot;,&#10;	&quot;429&quot; : &quot;The client has made too many requests to the API - rate limiting is applied.&quot;,&#10;	&quot;500&quot; : &quot;Server side exception occured.&quot;,&#10;	&quot;503&quot; : &quot;The server is currently unavailable (because it is overloaded or down for maintenance).&quot;,&#10;	&quot;504&quot; : &quot;The server was acting as a gateway or proxy and did not receive a timely response from the upstream server.&quot;&#10;}&#10;&#10;---&#10;vars.httpStatusMessage default defaultMessages[(vars.httpStatus as String)]]" doc:name="Setze httpStatusMessage" doc:id="d9e15904-f693-4e6e-9575-6621c1e3aa19" variableName="httpStatusMessage" />
-			<set-variable value='#[%dw 2.0&#10;output application/json&#10;---&#10;vars.httpStatusDetails default ""]' doc:name="Setze httpStatusDetails" doc:id="ae9827f0-2f54-4c1a-98ad-7603b5e8d847" variableName="httpStatusDetails" />
-			<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"code": vars.httpStatus,&#10;	"type": vars.httpStatusType,&#10;	"message": vars.httpStatusMessage,&#10;	"details": vars.httpStatusDetails,&#10;	"correlationId": correlationId,&#10;}]' doc:name="Setze Payload" doc:id="1c9a4cab-2694-434f-a048-b3e0d81415cb" />
-			<logger level="DEBUG" doc:name="Logge FlowEnde Payload" doc:id="027dea47-22a1-4afc-ab30-264d60b05c4f" message="#[%dw 2.0&#10;output application/json&#10;---&#10;payload]" category="${log.baseCategory}.globalErrorHandler.globalErrorHandler.any.flowEndePayload" />
+		</on-error-propagate> [STUDIO] -->
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="78283897-f90e-4e52-8c29-0fe7a2043bed" type="ANY" >
+			<set-variable value="#[%dw 2.0&#10;output application/java&#10;---&#10;vars.httpStatus default 500]" doc:name="Setze httpStatus" doc:id="cc4cc945-7ece-40b1-a8fc-95e4f9fdc792" variableName="httpStatus" />
+			<set-variable value='#[%dw 2.0&#10;output application/json&#10;&#10;var defaultTypes = {&#10;	"400" : "Bad Request",&#10;	"401" : "Unauthorized",&#10;	"403" : "Forbidden",&#10;	"404" : "Resource does not exists",&#10;	"405" : "Method not allowed",&#10;	"406" : "Not acceptable",&#10;	"407" : "Proxy Authentication Required",&#10;	"415" : "Unsupported Request Content Type",&#10;	"422" : "Unprocessible entity",&#10;	"429" : "Too many requests",&#10;	"500" : "Internal Server Error",&#10;	"503" : "Service Unavailable",&#10;	"504" : "Gateway Timeout"&#10;}&#10;&#10;---&#10;vars.httpStatusType default defaultTypes[(vars.httpStatus as String)]]' doc:name="Setze httpStatusType" doc:id="1ad9c259-21fd-4be5-8a72-01e158760b3b" variableName="httpStatusType" />
+			<set-variable value="#[%dw 2.0&#10;output application/json&#10;&#10;var defaultMessages = {&#10;	&quot;400&quot; : &quot;Something went wrong. Please try again.&quot;,&#10;	&quot;401&quot; : &quot;No credentials are provided or provided credentials are refused.&quot;,&#10;	&quot;403&quot; : &quot;User is not allowed to perform the requested operation.&quot;,&#10;	&quot;404&quot; : &quot;The requested URI does not map to a resource.&quot;,&#10;	&quot;405&quot; : &quot;A request was made of a resource using a request method not supported by that resource.&quot;,&#10;	&quot;406&quot; : &quot;The requested resource is only capable of generating content not acceptable according to the Accept headers sent in the request.&quot;,&#10;	&quot;407&quot; : &quot;The client must first authenticate itself with the proxy.&quot;,&#10;	&quot;415&quot; : &quot;The client sent a type of request which is not support by the requested endpoint. Check your request's Content-type machtes the requested endpoint accepted content type.&quot;,&#10;	&quot;422&quot; : &quot;The request was well-formed but was unable to be followed due to semantic errors in the input.&quot;,&#10;	&quot;429&quot; : &quot;The client has made too many requests to the API - rate limiting is applied.&quot;,&#10;	&quot;500&quot; : &quot;Server side exception occured.&quot;,&#10;	&quot;503&quot; : &quot;The server is currently unavailable (because it is overloaded or down for maintenance).&quot;,&#10;	&quot;504&quot; : &quot;The server was acting as a gateway or proxy and did not receive a timely response from the upstream server.&quot;&#10;}&#10;&#10;---&#10;vars.httpStatusMessage default defaultMessages[(vars.httpStatus as String)]]" doc:name="Setze httpStatusMessage" doc:id="35d7cf4c-1c3c-4375-ba30-e33dfa02b622" variableName="httpStatusMessage" />
+			<set-variable value='#[%dw 2.0&#10;output application/json&#10;---&#10;vars.httpStatusDetails default ""]' doc:name="Setze httpStatusDetails" doc:id="c18f612a-1419-486e-852e-0c47b38c7c56" variableName="httpStatusDetails" />
+			<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"code": vars.httpStatus,&#10;	"type": vars.httpStatusType,&#10;	"message": vars.httpStatusMessage,&#10;	"details": vars.httpStatusDetails,&#10;	"correlationId": correlationId,&#10;}]' doc:name="Setze Payload" doc:id="86e49616-421b-4a8c-8a29-7e89032610a4" />
+			<logger level="DEBUG" doc:name="Logge FlowEnde Payload" doc:id="16042f3e-14fd-44fb-9a05-c15337b9aa4d" message="#[%dw 2.0&#10;output application/json&#10;---&#10;payload]" category="${log.baseCategory}.globalErrorHandler.globalErrorHandler.any.flowEndePayload" />
 		</on-error-propagate>
 	
 

@@ -42,7 +42,7 @@ output application/json
 				</otherwise>
 			</choice>
 			<error-handler >
-				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="51bb76b1-a521-4ff8-83cb-00aac15b7f2f" type="CUSTOM:USER_ALREDY_EXISTS_CREATE" >
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="51bb76b1-a521-4ff8-83cb-00aac15b7f2f" type="CUSTOM:USER_ALREDY_EXISTS" >
 					<set-variable value="409" doc:name="httpStatus" doc:id="fe6c5763-5c4b-41f4-b8c5-76ec673900d0" variableName="httpStatus" />
 					<ee:transform doc:name="set Output" doc:id="8cf22a86-711e-40a2-b306-b2b85adb1d9f" >
 						<ee:message >
@@ -76,12 +76,30 @@ email: attributes.queryParams."email"
 				<logger level="INFO" doc:name="End Log HTTP-get:\users:sapi-database by Email" doc:id="5563d2af-91a2-40d2-b7b5-8b346f5c270f" message="The flow has ended  " category="${system.groupId}.get-users-Flow.message"/>
 			</when>
 			<otherwise >
-				<set-variable value='#["SELECT * FROM 	user;"]' doc:name="setSelectSqlQuerry" doc:id="244fd0a8-507a-4b3f-bf12-9bb60b385ecd" variableName="setSelectSqlQuerry" />
-				<db:select doc:name="Select all users" doc:id="98689995-a3d5-4309-baa9-0779ddf50054" config-ref="Database_Config_User" >
+				<set-variable value='#["SELECT * FROM 	user;"]' doc:name="setSelectSqlQuerry" doc:id="48321339-c908-40ef-b9bd-51ca0d73f2e1" variableName="setSelectSqlQuerry" />
+				<db:select doc:name="Select all users" doc:id="fc217d3d-39db-4293-864b-bf4f910d599e" config-ref="Database_Config_User">
 					<error-mapping sourceType="DB:QUERY_EXECUTION" targetType="CUSTOM:USER_NOT_FOUND" />
-					<db:sql ><![CDATA[#[vars.setSelectSqlQuerry]]]></db:sql>
+					<db:sql><![CDATA[#[vars.setSelectSqlQuerry]]]></db:sql>
 				</db:select>
-				<flow-ref doc:name="output-payload-map" doc:id="64d1ced3-a989-43e2-b317-01b6c2464408" name="output-payload-map" />
+				<ee:transform doc:name="output Payload" doc:id="3a845377-ed88-4669-b2ab-4b1ec23a5321">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload , indexOfPayload ) -> {
+	id:payload.id,
+	email:payload.email,
+	firstName:payload.firstName,
+	lastName:payload.lastName,
+	manager_id:payload.manager_id,
+	street:payload.street,
+	city: payload.city,
+	dob:payload.dob,
+	updated_at:payload.updated_at,
+	initials:payload.initials	
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 				<logger level="INFO" doc:name="End Log HTTP-get:\users:sapi-database" doc:id="ed18a74b-a453-494d-8e7d-f17b6a5c9d17" message="The flow has ended  " category="${system.groupId}.get-users-Flow.message"/>
 			</otherwise>
 		</choice>
@@ -125,7 +143,21 @@ id : attributes.uriParams.'Id'
   id: vars.id 
 }]]]></db:input-parameters>
 		</db:delete>
-		<flow-ref doc:name="fail-Function" doc:id="551b829a-36b8-4956-aaea-3dc07f6c8147" name="fail-Function" />
+		<ee:transform doc:name="fail Function" doc:id="58211d43-0c4d-419b-9d1f-93e3e78ba68c">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0 
+output application/json
+import * from dw::Runtime
+fun userNotFound(message) = if(payload == 0 )
+fail("User Not Found")
+else
+payload
+---
+try(() ->userNotFound(payload))
+]]></ee:set-payload>
+			</ee:message>
+			<ee:variables />
+		</ee:transform>
 		<choice doc:name="Delete or Error" doc:id="c3f8620a-36ff-46db-bad1-8f2f4803b81d" >
 			<when expression="payload.success == true" >
 				<set-variable value="204" doc:name="httpStatus" doc:id="5ebe914b-8e19-4a08-a73b-079bf2c50c57" variableName="httpStatus" />

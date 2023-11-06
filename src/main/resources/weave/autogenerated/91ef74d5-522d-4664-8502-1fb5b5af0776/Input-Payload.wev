@@ -1,6 +1,6 @@
 %dw 2.0
 
-type auto_ce07a1e6_8720_4bc3_923b_d17b7a0078b8_Input_Payload = {
+type auto_91ef74d5_522d_4664_8502_1fb5b5af0776_Input_Payload = {
   success: Boolean, 
   result?: Array<{ _?: java_lang_Object }>, 
   error?: {
