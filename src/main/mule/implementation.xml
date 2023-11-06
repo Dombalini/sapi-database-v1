@@ -6,7 +6,7 @@
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="create-user-SubFlow" doc:id="6f0af488-68bd-4bc2-98b9-f696ea063088" >
-		<logger level="INFO" doc:name="start Log payload HTTP-post\users:sapi-database " doc:id="22fa8074-0f6d-4f3b-ab8d-88685039aee3" message="start Log payload HTTP-post:\users:sapi-database #[payload]" />
+		<logger level="INFO" doc:name="start Log payload HTTP-post:\users:sapi-database #[payload]" doc:id="22fa8074-0f6d-4f3b-ab8d-88685039aee3" message="start Log payload HTTP-post:\users:sapi-database #[payload]" category="${system.groupId}.create-user-SubFlow.payload"/>
 		<set-variable value='#["INSERT INTO user (email, firstName, lastName, manager_id, street, city, dob, updated_at)&#10;VALUES (:email, :firstName, :lastName, :manager_id, :street, :city, :dob, NOW());"]' doc:name="setInsertSqlQuerry" doc:id="ac47f652-1f27-4d97-9b65-966b76a9f985" variableName="setInsertSqlQuerry" />
 		<db:insert doc:name="Insert user" doc:id="4f514d63-b203-413e-a536-41c1765a5977" config-ref="Database_Config_User">
 				<error-mapping sourceType="DB:QUERY_EXECUTION" targetType="CUSTOM:USER_ALREDY_EXISTS_CREATE" />
@@ -59,12 +59,12 @@ output application/json
 				</on-error-propagate>
 			</error-handler>
 		</try>
-		<logger level="INFO" doc:name="End Log payload HTTP-post\users:sapi-database" doc:id="feb37c32-d577-44ed-bfcb-279be2b2c906" message="End Log payload HTTP-post:\users:sapi-database #[payload]" />
+		<logger level="INFO" doc:name="End Log payload HTTP-post:\users:sapi-database #[payload]" doc:id="feb37c32-d577-44ed-bfcb-279be2b2c906" message="End Log payload HTTP-post:\users:sapi-database #[payload]" category="${system.groupId}.create-user-SubFlow.payload"/>
 	</sub-flow>
 	<flow name="get-users-Flow" doc:id="71d42d93-7682-4188-ae0f-dc9498afff9a" >
 		<choice doc:name="Select by Email or Select all" doc:id="a2e66851-ae67-4ef6-91e2-83aa904a5f23" >
 			<when expression='#[attributes.queryParams."email" != null]' >
-				<logger level="INFO" doc:name="start Log payload HTTP-get:\users:sapi-database by Email" doc:id="3edeb0c7-3b21-466e-a850-320c0750739b" message="start Log payload HTTP-get:\users:sapi-database #[payload] by Email" />
+				<logger level="INFO" doc:name="start Log payload HTTP-get:\users:sapi-database #[payload] by Email" doc:id="3edeb0c7-3b21-466e-a850-320c0750739b" message="start Log payload HTTP-get:\users:sapi-database #[payload] by Email" category="${system.groupId}.get-users-Flow.payload"/>
 				<set-variable value='#["select * from user where email= :email;"]' doc:name="setSelectbyEmailSqlQuerry" doc:id="06831bb4-addd-4fc1-af11-13630fefe59c" variableName="setSelectbyEmailSqlQuerry" />
 				<db:select doc:name="Select users by email" doc:id="2a8cc05a-9a93-4740-83c7-87924be52fdf" config-ref="Database_Config_User" >
 					<db:sql ><![CDATA[#[vars.setSelectbyEmailSqlQuerry]
@@ -75,17 +75,17 @@ email: attributes.queryParams."email"
 				</db:select>
 				<flow-ref doc:name="fail-Function" doc:id="ea3dbb66-08d1-4156-ad5e-e5c17a3f61c9" name="fail-Function" />
 				<flow-ref doc:name="choice-SubFlow" doc:id="94e7de48-d369-45d9-8ef5-603f0cea6a15" name="choice-SubFlow"/>
-				<logger level="INFO" doc:name="End Log payload HTTP-get:\users:sapi-database by Email" doc:id="5563d2af-91a2-40d2-b7b5-8b346f5c270f" message="End Log payload HTTP-get:\users:sapi-database #[payload] by Email" />
+				<logger level="INFO" doc:name="End Log payload HTTP-get:\users:sapi-database #[payload] by Email" doc:id="5563d2af-91a2-40d2-b7b5-8b346f5c270f" message="End Log payload HTTP-get:\users:sapi-database #[payload] by Email" category="${system.groupId}.get-users-Flow.payload"/>
 			</when>
 			<otherwise >
-				<logger level="INFO" doc:name="start Log payload HTTP-get:\users:sapi-database " doc:id="8dcbe324-edb6-4731-9498-dfeeba44417c" message="start Log payload HTTP-get:\users:sapi-database #[payload]" />
+				<logger level="INFO" doc:name="start Log payload HTTP-get:\users:sapi-database " doc:id="8dcbe324-edb6-4731-9498-dfeeba44417c" message="start Log payload HTTP-get:\users:sapi-database #[payload]" category="${system.groupId}.get-users-Flow.payload"/>
 				<set-variable value='#["SELECT * FROM 	user;"]' doc:name="setSelectSqlQuerry" doc:id="244fd0a8-507a-4b3f-bf12-9bb60b385ecd" variableName="setSelectSqlQuerry" />
 				<db:select doc:name="Select all users" doc:id="98689995-a3d5-4309-baa9-0779ddf50054" config-ref="Database_Config_User" >
 					<error-mapping sourceType="DB:QUERY_EXECUTION" targetType="CUSTOM:USER_NOT_FOUND" />
 					<db:sql ><![CDATA[#[vars.setSelectSqlQuerry]]]></db:sql>
 				</db:select>
 				<flow-ref doc:name="output-payload-map" doc:id="64d1ced3-a989-43e2-b317-01b6c2464408" name="output-payload-map" />
-				<logger level="INFO" doc:name="End Log payload HTTP-get:\users:sapi-database" doc:id="ed18a74b-a453-494d-8e7d-f17b6a5c9d17" message="End Log payload HTTP-get:\users:sapi-database #[payload]" />
+				<logger level="INFO" doc:name="End Log payload HTTP-get:\users:sapi-database" doc:id="ed18a74b-a453-494d-8e7d-f17b6a5c9d17" message="End Log payload HTTP-get:\users:sapi-database #[payload]" category="${system.groupId}.get-users-Flow.payload"/>
 			</otherwise>
 		</choice>
 		<error-handler >
@@ -105,7 +105,7 @@ output application/json
 		</error-handler>
 	</flow>
 	<sub-flow name="get-user-by-id-SubFlow" doc:id="7428ae48-ea28-4686-960d-8ec35d521c09" >
-		<logger level="INFO" doc:name="start Log payload HTTP-get:\users\{id}:sapi-database " doc:id="e5417012-87c0-435a-97e6-8329f9605f38" message="start Log payload HTTP-get:\users\{id}:sapi-database  #[payload]" />
+		<logger level="INFO" doc:name="start Log payload HTTP-get:\users\{id}:sapi-database " doc:id="e5417012-87c0-435a-97e6-8329f9605f38" message="start Log payload HTTP-get:\users\{id}:sapi-database  #[payload]" category="${system.groupId}.get-user-by-id-SubFlow.payload"/>
 		<flow-ref doc:name="id-variables" doc:id="0cb65e93-fabf-43ca-a1b1-33ce325d09ec" name="id-variables"/>
 		<set-variable value='#["&#10;SELECT *&#10;FROM user&#10;WHERE id = :id;&#10;"]' doc:name="setSelectSqlQuerry" doc:id="a61a5717-8909-4f6a-ad52-9434c52d74dc" variableName="setSelectSqlQuerry" />
 		<db:select doc:name="Select users by id" doc:id="6e35fdb0-58e4-4649-a524-2d31f5261fec" config-ref="Database_Config_User" >
@@ -116,10 +116,10 @@ id : attributes.uriParams.'Id'
 		</db:select>
 		<flow-ref doc:name="fail-Function" doc:id="c0397f7b-eaca-45a1-bb28-aa127bb7df79" name="fail-Function"/>
 		<flow-ref doc:name="choice-SubFlow" doc:id="ce9f184c-689f-4d1a-b377-6ec803ca60ee" name="choice-SubFlow" />
-		<logger level="INFO" doc:name="end Log payload HTTP-get:\users\{id}:sapi-database" doc:id="91a706ee-f26b-4dca-90a4-af8332f597ef" message="end Log payload HTTP-get:\users\{id}:sapi-database #[payload]" />
+		<logger level="INFO" doc:name="end Log payload HTTP-get:\users\{id}:sapi-database" doc:id="91a706ee-f26b-4dca-90a4-af8332f597ef" message="end Log payload HTTP-get:\users\{id}:sapi-database #[payload]" category="${system.groupId}.get-user-by-id-SubFlow.payload"/>
 	</sub-flow>
 	<sub-flow name="delete-user-by-id-SubFlow" doc:id="a400cd7c-b46e-4274-95b9-a40a8c8b5e98" >
-		<logger level="INFO" doc:name="start Log payload HTTP-get:\users:sapi-database" doc:id="56f112b1-9bcf-4ae0-bee4-dda53a7290e3" message="start Log payload HTTP-get:\users:sapi-database #[payload]" />
+		<logger level="INFO" doc:name="start Log payload HTTP-get:\users:sapi-database" doc:id="56f112b1-9bcf-4ae0-bee4-dda53a7290e3" message="start Log payload HTTP-get:\users:sapi-database #[payload]" category="${system.groupId}.delete-user-by-id-SubFlow.payload"/>
 		<flow-ref doc:name="id-variables" doc:id="9db34430-3160-44b1-a15a-c0baa5a86386" name="id-variables" />
 		<set-variable value='#["DELETE FROM USER WHERE id = :id;"]' doc:name="setDeleteSqlQuerry" doc:id="75043087-5a6d-4ff4-b007-db0278822dd4" variableName="setDeleteSqlQuerry" />
 		<db:delete doc:name="Delete users by id" doc:id="c477dc2e-cce7-40ff-ac79-f2775d7faf97" config-ref="Database_Config_User" >
@@ -137,10 +137,10 @@ id : attributes.uriParams.'Id'
 				<raise-error doc:name="CUSTOM:USER_NOT_FOUND_DELETE" doc:id="39acbc27-6f7e-4efd-b23b-07ebaef37806" type="CUSTOM:USER_NOT_FOUND_DELETE" description="The user was not found on Database" />
 			</otherwise>
 		</choice>
-		<logger level="INFO" doc:name="Log setUriParamsForUserID" doc:id="f8ba2be7-0f33-497c-8d59-a7fd65e77f12" message="setUriParamsForUserID: #[vars.setUriParamsForUserID]" />
+		<logger level="INFO" doc:name="Log setUriParamsForUserID" doc:id="f8ba2be7-0f33-497c-8d59-a7fd65e77f12" message="setUriParamsForUserID: #[vars.setUriParamsForUserID]" category="${system.groupId}.delete-user-by-id-SubFlow.payload"/>
 	</sub-flow>
 	<sub-flow name="update-user-by-id-SubFlow" doc:id="9fe561a9-3269-42d7-8775-60f779281f65" >
-		<logger level="INFO" doc:name="start Log payload HTTP-put\users\{id}:sapi-database " doc:id="6eeb1fc1-9530-47c4-9392-82581aa7b7de" message="start Log payload HTTP-put:\users\{id}:sapi-database  #[payload]" />
+		<logger level="INFO" doc:name="start Log payload HTTP-put\users\{id}:sapi-database " doc:id="6eeb1fc1-9530-47c4-9392-82581aa7b7de" message="start Log payload HTTP-put:\users\{id}:sapi-database  #[payload]" category="${system.groupId}.update-user-by-id-SubFlow.payload"/>
 		<flow-ref doc:name="id-variables" doc:id="069082ce-4804-46d9-9416-c9455b38a5a7" name="id-variables" />
 		<set-variable value='#["UPDATE user&#10;        SET&#10;            email = :email,&#10;            firstName = :firstName,&#10;            lastName = :lastName,&#10;            manager_id = :manager_id,&#10;            street = :street,&#10;            city = :city,&#10;            dob = :dob,&#10;            updated_at = NOW()&#10;        WHERE&#10;            id = :id;"]' doc:name="setUpdateSqlQuerry" doc:id="dba04767-16dc-43c6-81b1-54f0b289728f" variableName="setUpdateSqlQuerry" />
 		<db:update doc:name="Update user by id" doc:id="2ac41af1-7e05-4a4b-95f5-a32438144066" config-ref="Database_Config_User" >
@@ -184,6 +184,6 @@ output application/json
 				</ee:transform>
 			</otherwise>
 		</choice>
-		<logger level="INFO" doc:name="end Log payload HTTP-get:\users\{id}:sapi-database" doc:id="18033d74-4a48-4f1e-bf92-5026d73ab497" message="end Log payload HTTP-get:\users\{id}:sapi-database #[payload]" />
+		<logger level="INFO" doc:name="end Log payload HTTP-get:\users\{id}:sapi-database" doc:id="18033d74-4a48-4f1e-bf92-5026d73ab497" message="end Log payload HTTP-get:\users\{id}:sapi-database #[payload]" category="${system.groupId}.update-user-by-id-SubFlow.payload"/>
 	</sub-flow>
 </mule>
