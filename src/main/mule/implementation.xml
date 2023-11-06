@@ -5,7 +5,7 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-	<sub-flow name="create-user-api-SubFlow" doc:id="6f0af488-68bd-4bc2-98b9-f696ea063088" >
+	<sub-flow name="create-user-SubFlow" doc:id="6f0af488-68bd-4bc2-98b9-f696ea063088" >
 		<logger level="INFO" doc:name="start Log payload HTTP-post\users:sapi-database " doc:id="22fa8074-0f6d-4f3b-ab8d-88685039aee3" message="start Log payload HTTP-post:\users:sapi-database #[payload]" />
 		<set-variable value='#["INSERT INTO user (email, firstName, lastName, manager_id, street, city, dob, updated_at)&#10;VALUES (:email, :firstName, :lastName, :manager_id, :street, :city, :dob, NOW());"]' doc:name="setInsertSqlQuerry" doc:id="ac47f652-1f27-4d97-9b65-966b76a9f985" variableName="setInsertSqlQuerry" />
 		<db:insert doc:name="Insert user" doc:id="4f514d63-b203-413e-a536-41c1765a5977" config-ref="Database_Config_User">
@@ -61,7 +61,7 @@ output application/json
 		</try>
 		<logger level="INFO" doc:name="End Log payload HTTP-post\users:sapi-database" doc:id="feb37c32-d577-44ed-bfcb-279be2b2c906" message="End Log payload HTTP-post:\users:sapi-database #[payload]" />
 	</sub-flow>
-	<flow name="get-users-api-Flow" doc:id="71d42d93-7682-4188-ae0f-dc9498afff9a" >
+	<flow name="get-users-Flow" doc:id="71d42d93-7682-4188-ae0f-dc9498afff9a" >
 		<choice doc:name="Select by Email or Select all" doc:id="a2e66851-ae67-4ef6-91e2-83aa904a5f23" >
 			<when expression='#[attributes.queryParams."email" != null]' >
 				<logger level="INFO" doc:name="start Log payload HTTP-get:\users:sapi-database by Email" doc:id="3edeb0c7-3b21-466e-a850-320c0750739b" message="start Log payload HTTP-get:\users:sapi-database #[payload] by Email" />
@@ -104,7 +104,7 @@ output application/json
 			</on-error-propagate>
 		</error-handler>
 	</flow>
-	<sub-flow name="get-user-by-id-api-SubFlow" doc:id="7428ae48-ea28-4686-960d-8ec35d521c09" >
+	<sub-flow name="get-user-by-id-SubFlow" doc:id="7428ae48-ea28-4686-960d-8ec35d521c09" >
 		<logger level="INFO" doc:name="start Log payload HTTP-get:\users\{id}:sapi-database " doc:id="e5417012-87c0-435a-97e6-8329f9605f38" message="start Log payload HTTP-get:\users\{id}:sapi-database  #[payload]" />
 		<flow-ref doc:name="id-variables" doc:id="0cb65e93-fabf-43ca-a1b1-33ce325d09ec" name="id-variables"/>
 		<set-variable value='#["&#10;SELECT *&#10;FROM user&#10;WHERE id = :id;&#10;"]' doc:name="setSelectSqlQuerry" doc:id="a61a5717-8909-4f6a-ad52-9434c52d74dc" variableName="setSelectSqlQuerry" />
@@ -118,7 +118,7 @@ id : attributes.uriParams.'Id'
 		<flow-ref doc:name="choice-SubFlow" doc:id="ce9f184c-689f-4d1a-b377-6ec803ca60ee" name="choice-SubFlow" />
 		<logger level="INFO" doc:name="end Log payload HTTP-get:\users\{id}:sapi-database" doc:id="91a706ee-f26b-4dca-90a4-af8332f597ef" message="end Log payload HTTP-get:\users\{id}:sapi-database #[payload]" />
 	</sub-flow>
-	<sub-flow name="delete-user-by-id-api-SubFlow" doc:id="a400cd7c-b46e-4274-95b9-a40a8c8b5e98" >
+	<sub-flow name="delete-user-by-id-SubFlow" doc:id="a400cd7c-b46e-4274-95b9-a40a8c8b5e98" >
 		<logger level="INFO" doc:name="start Log payload HTTP-get:\users:sapi-database" doc:id="56f112b1-9bcf-4ae0-bee4-dda53a7290e3" message="start Log payload HTTP-get:\users:sapi-database #[payload]" />
 		<flow-ref doc:name="id-variables" doc:id="9db34430-3160-44b1-a15a-c0baa5a86386" name="id-variables" />
 		<set-variable value='#["DELETE FROM USER WHERE id = :id;"]' doc:name="setDeleteSqlQuerry" doc:id="75043087-5a6d-4ff4-b007-db0278822dd4" variableName="setDeleteSqlQuerry" />
