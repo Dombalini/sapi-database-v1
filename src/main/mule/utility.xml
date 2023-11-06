@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="choice-SubFlow" doc:id="21dd861a-fe7d-4483-9249-5d006c4f1ab8" >
+		<choice doc:name="Choice" doc:id="58067b64-ccf2-4bec-850e-f5364b72bc47" >
+			<when expression="#[payload.success == true]" >
+				<flow-ref doc:name="transform-message-output-payload" doc:id="ef394e80-937e-428b-9cfd-6b623c866be3" name="transform-message-output-payload"/>
+			</when>
+			<otherwise >
+				<raise-error doc:name="Raise error" doc:id="efe829df-fcb6-49ea-9ff6-5207d405a98d" type="CUSTOM:USER_NOT_FOUND" />
+			</otherwise>
+		</choice>
+	</sub-flow>
+	<sub-flow name="transform-message-output-payload" doc:id="ce07a1e6-8720-4bc3-923b-d17b7a0078b8" >
+		<ee:transform doc:name="output Payload" doc:id="47c4ca16-104c-41ed-aaa1-1dbb0f9476f7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.result map ( payload , indexOfPayload ) -> {
+	id:payload.id,
+	email:payload.email,
+	firstName:payload.firstName,
+	lastName:payload.lastName,
+	manager_id:payload.manager_id,
+	street:payload.street,
+	city: payload.city,
+	dob:payload.dob,
+	updated_at:payload.updated_at,
+	initials:payload.initials	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="id-variables" doc:id="19a4314d-5d4e-4334-8fdf-637676862ed2" >
+		<set-variable value='#[attributes.uriParams."Id"]' doc:name="id" doc:id="9228f210-580b-46da-8e10-fcb1af39b892" variableName="id" />
+	</sub-flow>
+	<sub-flow name="fail-Function" doc:id="407e254a-ecf0-4f6a-92b6-385df2ccb860" >
+		<ee:transform doc:name="fail Function" doc:id="87abf7a6-f8cc-4629-83e1-78401cb3e448" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0 
+output application/json
+import * from dw::Runtime
+fun userNotFound(message) = if(payload == [] )
+fail("User Not Found")
+else
+payload
+---
+try(() ->userNotFound(payload))
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

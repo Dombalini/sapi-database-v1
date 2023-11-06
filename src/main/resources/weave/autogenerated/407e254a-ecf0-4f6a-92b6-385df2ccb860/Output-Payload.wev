@@ -1,0 +1,21 @@
+%dw 2.0
+
+type auto_407e254a_ecf0_4f6a_92b6_385df2ccb860_Output_Payload = {
+  success: Boolean, 
+  result?: Array<{ _?: java_lang_Object }>, 
+  error?: {
+    kind: String, 
+    message: String, 
+    stack?: Array<String>, 
+    stackTrace?: String, 
+    location?: String, 
+    _?: Any
+  }, 
+  _?: Any
+}
+type java_lang_Object = {|  |} {"typeAlias": "Object",
+"class": "java.lang.Object",
+"typeId": "java.lang.Object"}
+
+
+
