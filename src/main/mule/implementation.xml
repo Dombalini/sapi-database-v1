@@ -24,7 +24,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			</db:insert>
 		<try doc:name="Try" doc:id="058123ff-d6ff-427f-98f5-c0b2d0bd5601" >
 			<flow-ref doc:name="fail-Function" doc:id="7fded892-9b51-42e7-800e-6be19060c439" name="fail-Function" />
-			<choice doc:name="If the payloadc " doc:id="95ae301c-ebd2-4ba7-b801-faf4616b3d18" >
+			<choice doc:name="Create or Error" doc:id="95ae301c-ebd2-4ba7-b801-faf4616b3d18" >
 				<when expression="payload.success == true" >
 					<ee:transform doc:name="set Output" doc:id="13931c0e-3752-43f5-b893-244cf96f192f" >
 						<ee:message >
@@ -62,7 +62,7 @@ output application/json
 		<logger level="INFO" doc:name="End Log payload HTTP-post\users:sapi-database" doc:id="feb37c32-d577-44ed-bfcb-279be2b2c906" message="End Log payload HTTP-post:\users:sapi-database #[payload]" />
 	</sub-flow>
 	<flow name="get-users-api-Flow" doc:id="71d42d93-7682-4188-ae0f-dc9498afff9a" >
-		<choice doc:name="Choice" doc:id="a2e66851-ae67-4ef6-91e2-83aa904a5f23" >
+		<choice doc:name="Select by Email or Select all" doc:id="a2e66851-ae67-4ef6-91e2-83aa904a5f23" >
 			<when expression='#[attributes.queryParams."email" != null]' >
 				<logger level="INFO" doc:name="start Log payload HTTP-get:\users:sapi-database by Email" doc:id="3edeb0c7-3b21-466e-a850-320c0750739b" message="start Log payload HTTP-get:\users:sapi-database #[payload] by Email" />
 				<set-variable value='#["select * from user where email= :email;"]' doc:name="setSelectbyEmailSqlQuerry" doc:id="06831bb4-addd-4fc1-af11-13630fefe59c" variableName="setSelectbyEmailSqlQuerry" />
@@ -84,7 +84,7 @@ email: attributes.queryParams."email"
 					<error-mapping sourceType="DB:QUERY_EXECUTION" targetType="CUSTOM:USER_NOT_FOUND" />
 					<db:sql ><![CDATA[#[vars.setSelectSqlQuerry]]]></db:sql>
 				</db:select>
-				<flow-ref doc:name="transform-message-output-payload" doc:id="64d1ced3-a989-43e2-b317-01b6c2464408" name="transform-message-output-payload" />
+				<flow-ref doc:name="output-payload-map" doc:id="64d1ced3-a989-43e2-b317-01b6c2464408" name="output-payload-map" />
 				<logger level="INFO" doc:name="End Log payload HTTP-get:\users:sapi-database" doc:id="ed18a74b-a453-494d-8e7d-f17b6a5c9d17" message="End Log payload HTTP-get:\users:sapi-database #[payload]" />
 			</otherwise>
 		</choice>
@@ -129,7 +129,7 @@ id : attributes.uriParams.'Id'
 }]]]></db:input-parameters>
 		</db:delete>
 		<flow-ref doc:name="fail-Function" doc:id="551b829a-36b8-4956-aaea-3dc07f6c8147" name="fail-Function" />
-		<choice doc:name="Choice" doc:id="c3f8620a-36ff-46db-bad1-8f2f4803b81d" >
+		<choice doc:name="Delete or Error" doc:id="c3f8620a-36ff-46db-bad1-8f2f4803b81d" >
 			<when expression="payload.success == true" >
 				<set-variable value="204" doc:name="httpStatus" doc:id="5ebe914b-8e19-4a08-a73b-079bf2c50c57" variableName="httpStatus" />
 			</when>

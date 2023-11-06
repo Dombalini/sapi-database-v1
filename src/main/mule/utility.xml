@@ -6,16 +6,16 @@
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="choice-SubFlow" doc:id="21dd861a-fe7d-4483-9249-5d006c4f1ab8" >
-		<choice doc:name="Choice" doc:id="58067b64-ccf2-4bec-850e-f5364b72bc47" >
+		<choice doc:name="Return payload or Error" doc:id="58067b64-ccf2-4bec-850e-f5364b72bc47" >
 			<when expression="#[payload.success == true]" >
-				<flow-ref doc:name="transform-message-output-payload" doc:id="ef394e80-937e-428b-9cfd-6b623c866be3" name="transform-message-output-payload"/>
+				<flow-ref doc:name="output-payload-map" doc:id="ef394e80-937e-428b-9cfd-6b623c866be3" name="output-payload-map"/>
 			</when>
 			<otherwise >
 				<raise-error doc:name="CUSTOM:USER_NOT_FOUND" doc:id="efe829df-fcb6-49ea-9ff6-5207d405a98d" type="CUSTOM:USER_NOT_FOUND" />
 			</otherwise>
 		</choice>
 	</sub-flow>
-	<sub-flow name="transform-message-output-payload" doc:id="ce07a1e6-8720-4bc3-923b-d17b7a0078b8" >
+	<sub-flow name="output-payload-map" doc:id="ce07a1e6-8720-4bc3-923b-d17b7a0078b8" >
 		<ee:transform doc:name="output Payload" doc:id="47c4ca16-104c-41ed-aaa1-1dbb0f9476f7" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
