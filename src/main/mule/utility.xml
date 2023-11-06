@@ -11,9 +11,12 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<flow-ref doc:name="output-payload-map" doc:id="ef394e80-937e-428b-9cfd-6b623c866be3" name="output-payload-map"/>
 			</when>
 			<otherwise >
-				<raise-error doc:name="CUSTOM:USER_NOT_FOUND" doc:id="efe829df-fcb6-49ea-9ff6-5207d405a98d" type="CUSTOM:USER_NOT_FOUND" />
+				<flow-ref doc:name="user-not-found-raise-error" doc:id="6de6b9db-1a58-4ac3-8ac1-a81e7a957d95" name="user-not-found-raise-error"/>
 			</otherwise>
 		</choice>
+	</sub-flow>
+	<sub-flow name="user-not-found-raise-error" doc:id="902e5022-4887-4d23-98c1-a02f0a9869a7" >
+		<raise-error doc:name="CUSTOM:USER_NOT_FOUND" doc:id="63566ea4-d1df-4cfb-97fb-934102488f45" type="CUSTOM:USER_NOT_FOUND" />
 	</sub-flow>
 	<sub-flow name="output-payload-map" doc:id="ce07a1e6-8720-4bc3-923b-d17b7a0078b8" >
 		<ee:transform doc:name="output Payload" doc:id="47c4ca16-104c-41ed-aaa1-1dbb0f9476f7" >

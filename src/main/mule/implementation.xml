@@ -131,7 +131,7 @@ id : attributes.uriParams.'Id'
 				<set-variable value="204" doc:name="httpStatus" doc:id="5ebe914b-8e19-4a08-a73b-079bf2c50c57" variableName="httpStatus" />
 			</when>
 			<otherwise >
-				<raise-error doc:name="CUSTOM:USER_NOT_FOUND" doc:id="39acbc27-6f7e-4efd-b23b-07ebaef37806" type="CUSTOM:USER_NOT_FOUND" description="The user was not found on Database" />
+				<flow-ref doc:name="user-not-found-raise-error" doc:id="1e62d435-e8f1-48a0-965c-f894858998ad" name="user-not-found-raise-error" />
 			</otherwise>
 		</choice>
 		<logger level="INFO" doc:name="end Log  HTTP-delete:\users\(Id):sapi-database-config" doc:id="f8ba2be7-0f33-497c-8d59-a7fd65e77f12" category="${system.groupId}.delete-user-by-id-SubFlow.message" message="The flow has ended  "/>
