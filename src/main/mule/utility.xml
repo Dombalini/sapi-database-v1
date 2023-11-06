@@ -36,7 +36,7 @@ payload.result map ( payload , indexOfPayload ) -> {
 			</ee:message>
 		</ee:transform>
 	</sub-flow>
-	<sub-flow name="id-variables" doc:id="19a4314d-5d4e-4334-8fdf-637676862ed2" >
+	<sub-flow name="id-variable" doc:id="19a4314d-5d4e-4334-8fdf-637676862ed2" >
 		<set-variable value='#[attributes.uriParams."Id"]' doc:name="id" doc:id="9228f210-580b-46da-8e10-fcb1af39b892" variableName="id" />
 	</sub-flow>
 	<sub-flow name="fail-Function" doc:id="407e254a-ecf0-4f6a-92b6-385df2ccb860" >
