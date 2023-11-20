@@ -162,8 +162,8 @@ try(() ->userNotFound(payload))
 			<when expression="payload.success == true" >
 				<set-variable value="204" doc:name="httpStatus" doc:id="5ebe914b-8e19-4a08-a73b-079bf2c50c57" variableName="httpStatus" />
 			</when>
-			<otherwise >
-				<flow-ref doc:name="user-not-found-raise-error" doc:id="1e62d435-e8f1-48a0-965c-f894858998ad" name="user-not-found-raise-error" />
+			<otherwise>
+				<set-variable value="404" doc:name="httpStatus" doc:id="2c1ebd69-e1f4-4fdf-aaa7-6da1dc91a588" variableName="httpStatus" />
 			</otherwise>
 		</choice>
 		<logger level="INFO" doc:name="end Log  HTTP-delete:\users\(Id):sapi-database-config" doc:id="f8ba2be7-0f33-497c-8d59-a7fd65e77f12" category="${system.groupId}.delete-user-by-id-SubFlow.message" message="end Log  HTTP-delete:\users\(Id):sapi-database-config"/>

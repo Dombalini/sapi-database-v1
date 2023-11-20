@@ -10,13 +10,20 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			<when expression="#[payload.success == true]" >
 				<flow-ref doc:name="output-payload" doc:id="ef394e80-937e-428b-9cfd-6b623c866be3" name="output-payload"/>
 			</when>
-			<otherwise >
-				<flow-ref doc:name="user-not-found-raise-error" doc:id="6de6b9db-1a58-4ac3-8ac1-a81e7a957d95" name="user-not-found-raise-error"/>
+			<otherwise>
+				<ee:transform doc:name="output Payload" doc:id="120c5724-884e-4751-b44a-3db27eab2a50" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "message" : "User not Found"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<set-variable value="404" doc:name="httpStatus" doc:id="d05c2a98-a4b9-469b-a998-2c506cfbe2f4" variableName="httpStatus" />
 			</otherwise>
 		</choice>
-	</sub-flow>
-	<sub-flow name="user-not-found-raise-error" doc:id="902e5022-4887-4d23-98c1-a02f0a9869a7" >
-		<raise-error doc:name="CUSTOM:USER_NOT_FOUND" doc:id="63566ea4-d1df-4cfb-97fb-934102488f45" type="CUSTOM:USER_NOT_FOUND" />
 	</sub-flow>
 	<sub-flow name="output-payload" doc:id="91ef74d5-522d-4664-8502-1fb5b5af0776" >
 		<ee:transform doc:name="output Payload" doc:id="af664239-1cfa-4501-927a-74213d7bb3ab" >
