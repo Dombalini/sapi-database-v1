@@ -1,0 +1,52 @@
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="implementation-test-suite.xml" />
+	<munit:test name="implementation-test-suite-get-users-FlowTest" doc:id="710e28d0-3e7b-4b8c-9807-d647e3b5e93b" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="24849fa8-bf93-4688-8941-b610f2477fd0" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="50db31cb-049f-4bde-afa6-eca5eae2d44a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[[&#10;    {&#10;        "id": 1,&#10;        "email": "lhjllj@email.com",&#10;        "firstName": "dsada",&#10;        "lastName": "hzhdsadabzbh",&#10;        "manager_id": 1,&#10;        "street": "Rose Street",&#10;        "city": "sdasd",&#10;        "dob": "1989-10-08T00:00:00",&#10;        "updated_at": "2023-11-15T11:35:31",&#10;        "initials": "dh"&#10;    },&#10;    {&#10;        "id": 2,&#10;        "email": "jack@starshipexplorer.com",&#10;        "firstName": "Jack",&#10;        "lastName": "Steele",&#10;        "manager_id": 1,&#10;        "street": "Galaxy Lane",&#10;        "city": "Alpha Centauri",&#10;        "dob": "2970-03-10T00:00:00",&#10;        "updated_at": "2023-11-09T10:27:35",&#10;        "initials": "JS"&#10;    }&#10;    ]]' />
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get-users-Flow" doc:id="64c064e7-f1c5-49d2-86b8-b58a02f416ba" name="get-users-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="ba89176a-4b09-4f7b-bf3e-63992e3ebf20" />
+		
+</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-create-user-SubFlowTest" doc:id="b08a53c6-3a51-4907-b8ad-ba79189c7fcf" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="cde03d8c-fa37-43cc-b81e-de23cd04e28c" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="a78ad722-0229-47d5-9931-cb5c7d3a53fd" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[{&#10;  "email": "what.davis@email.com",&#10;  "firstName": "adsda",&#10;  "lastName": "Davis",&#10;  "manager_id": null,&#10;  "address": {&#10;    "street": "Oak Lane",&#10;    "city": "Chicago"&#10;  },&#10;  "dob": "1977-09-12",&#10;  "updated_at": "2023-10-23T16:00:00.000Z",&#10;  "initials": "MD"&#10;}]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="4a651a9a-b45f-440f-b8e3-618bf838a803" >
+				<munit:payload value='#[{&#10;  "email": "what.davis@email.com",&#10;  "firstName": "adsda",&#10;  "lastName": "Davis",&#10;  "manager_id": null,&#10;  "address": {&#10;    "street": "Oak Lane",&#10;    "city": "Chicago"&#10;  },&#10;  "dob": "1977-09-12",&#10;  "updated_at": "2023-10-23T16:00:00.000Z",&#10;  "initials": "MD"&#10;}]' />
+				<munit:error id='"USER_ALREDY_EXISTS_CREATE"' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to create-user-SubFlow" doc:id="1fa23a2c-5d78-4a73-b889-b25860ba0fd9" name="create-user-SubFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="0bbc6d96-c1e8-4883-917c-2a84c34f6a14" />
+		</munit:validation>
+	</munit:test>
+
+</mule>
