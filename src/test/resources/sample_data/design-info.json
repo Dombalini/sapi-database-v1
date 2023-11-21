@@ -1,5 +1,8 @@
 {
   "sampleData": {
+    "5d7b38cb-55ff-42a7-a219-1335881e93a3": {
+      "vars-inputParams": "sample_data/java_1.dwl"
+    },
     "ceeef58e-2b1e-4a27-8f74-fe4e57285aca": {
       "payload": "sample_data/java.dwl"
     }
