@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xsi:schemaLocation="
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
 		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
-		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<munit:config name="implem-test-suite.xml" />
-	<munit:test name="implementation-test-suite-get-users-FlowTest" doc:id="f046ade1-74de-4c6d-853a-06b294cbe99a" description="Test" ignore="true">
+	<munit:test name="get:\users-FlowTest" doc:id="f046ade1-74de-4c6d-853a-06b294cbe99a" description="Test">
 		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mock when" doc:id="ad90bb24-16a3-4375-a9bc-dedb215ee951" processor="flow-ref">
+			<munit-tools:mock-when doc:name="Mock when db:select" doc:id="ad90bb24-16a3-4375-a9bc-dedb215ee951" processor="db:select">
 				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="50db31cb-049f-4bde-afa6-eca5eae2d44a" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="fc217d3d-39db-4293-864b-bf4f910d599e" attributeName="doc:id" />
 				</munit-tools:with-attributes>
 				<munit-tools:then-return >
 					<munit-tools:payload value='#[%dw 2.0&#10;output application/java&#10;---&#10;readUrl("classpath://getAllUsersOrByEmailTestResources/mock_users_payload.dwl")]' />
@@ -21,43 +22,28 @@
 </munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution >
+			<munit:set-event doc:name="Set Event querryParam Email" doc:id="20446b86-1b2d-4edf-ae93-b8fadae527b8">
+				<munit:attributes value='#[readUrl("classpath://getAllUsersOrByEmailTestResources/set_input_event_email.dwl")]' />
+			</munit:set-event>
 			<flow-ref doc:name="Flow-ref to get-users-Flow" doc:id="ae658f0e-0f4e-4779-8872-42b624d23bfc" name="get-users-Flow"/>
-		</munit:execution>
+		
+</munit:execution>
 		<munit:validation >
-			<munit-tools:assert doc:name="Assert expression" doc:id="e4d6edef-762a-422a-9182-7d5ec473cf49" >
-				<munit-tools:that ><![CDATA[#[%dw 2.0
-import getAllUsersOrByEmailTestResources::assert_success_response
-output application/java
----
-assert_success_response::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
-			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify call" doc:id="39b1c58b-a2df-4e00-b3e1-2fa38f0db89a" processor="choice" atLeast='#[1]'>
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="a2e66851-ae67-4ef6-91e2-83aa904a5f23" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="697d2e04-ba2f-4a65-9359-5571d66adc03" actual="#[payload]" expected='#[{&#10;        "id": 2,&#10;        "email": "jack@starshipexplorer.com",&#10;        "firstName": "Jack",&#10;        "lastName": "Steele",&#10;        "manager_id": 1,&#10;        "street": "Galaxy Lane",&#10;        "city": "Alpha Centauri",&#10;        "dob": "2970-03-10T00:00:00",&#10;        "updated_at": "2023-11-09T10:27:35",&#10;        "initials": "JS"&#10;    }]'/>
 		
 
 </munit:validation>
 	</munit:test>
-	<munit:test name="implementation-test-suite-get-users-error-no-users" doc:id="3600f95c-2558-4101-82a2-662c058507de" description="Test" ignore="true">
+	<munit:test name="get:\users-by-email-expression-error-FlowTest" doc:id="37c2ee46-ded0-4c43-9e3d-85aa8003ad3d" description="Test" ignore="true">
 		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mock when" doc:id="cc93d361-80f6-4b02-b34c-5360d1aef32f" processor="flow-ref" >
+			<munit-tools:mock-when doc:name="Mock when db:select" doc:id="4da2d0e8-fcf8-4299-90e8-79037f8a19ab" processor="db:select">
 				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="50db31cb-049f-4bde-afa6-eca5eae2d44a" attributeName="doc:id" />
-				</munit-tools:with-attributes>
-				<munit-tools:then-return >
-					<munit-tools:payload value="#[[]]" />
-				</munit-tools:then-return>
-			</munit-tools:mock-when>
-		</munit:behavior>
-		<munit:execution >
-			<flow-ref doc:name="Flow-ref to get-users-Flow" doc:id="86286ae6-0b66-403e-96dd-f1e50743df25" name="get-users-Flow"/>
-		</munit:execution>
-		<munit:validation >
-			<munit-tools:assert doc:name="Assert expression" doc:id="9f63e6fb-4516-495c-ae1b-51c72b60a385" />
-		</munit:validation>
-	</munit:test>
-	<munit:test name="implementation-test-suite-get-users-by-email-FlowTest" doc:id="37c2ee46-ded0-4c43-9e3d-85aa8003ad3d" description="Test" ignore="true">
-		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mock when" doc:id="4da2d0e8-fcf8-4299-90e8-79037f8a19ab" processor="flow-ref">
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="50db31cb-049f-4bde-afa6-eca5eae2d44a" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="2a8cc05a-9a93-4740-83c7-87924be52fdf" attributeName="doc:id" />
 				</munit-tools:with-attributes>
 				<munit-tools:then-return >
 					<munit-tools:payload value="#[payload]" />
@@ -69,16 +55,56 @@ assert_success_response::main({payload: payload, attributes: attributes, vars: v
 				<munit:attributes value='#[readUrl("classpath://getAllUsersOrByEmailTestResources/set_input_event_email.dwl")]' />
 			</munit:set-event>
 			<flow-ref doc:name="Flow-ref to get-users-Flow" doc:id="60ba6433-81c7-4788-b57b-ec836f4e067e" name="get-users-Flow" />
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression contains EXPRESSION" doc:id="181f4448-4917-4b14-93fa-980166f758ba" >
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getAllUsersOrByEmailTestResources::assert_success_expression
+output application/java
+---
+assert_success_expression::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		
+</munit:validation>
+	</munit:test>
+<!-- [STUDIO:"implementation-test-suiteFlow"]		<flow name="implementation-test-suiteFlow" doc:id="2e6fefaa-312c-453b-a92c-4df15a93d366" >
+		<munit-tools:assert-that doc:name="Assert that" doc:id="08aacd89-0de4-4a59-8cc8-be7f8b3baef4" is="#[MunitTools::notNullValue()&#93;"/>
+		<munit-tools:verify-call doc:name="Verify call" doc:id="6bd9e2af-5a97-450d-aadc-08111de00aef" />
+		<munit-tools:spy doc:name="Spy" doc:id="66f25734-4c34-4f44-bf33-2effa46151fa" />
+	</flow> [STUDIO] -->
+	<munit:test name="get:\users-by-email-FlowTest" doc:id="34f1514f-0e54-4d82-87eb-c21f9ad180a4" description="Test" ignore="true">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when db:select" doc:id="0b3505b7-7b98-4c84-a5d4-3bdb7660b57e" processor="db:select">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2a8cc05a-9a93-4740-83c7-87924be52fdf" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[payload]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event queryParam email" doc:id="9573296f-084c-49a2-b8be-5abb75f8487f" >
+				<munit:payload value="#[{ method : 'GET', queryParams : { email : &quot;isabella@quantumphysicslab.edu&quot;}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to get-users-Flow" doc:id="34ec0933-4c0b-418d-b7ed-e51acd71d437" name="get-users-Flow"/>
 		</munit:execution>
 		<munit:validation >
-			<munit-tools:assert doc:name="Assert expression" doc:id="181f4448-4917-4b14-93fa-980166f758ba" />
+			<munit-tools:assert doc:name="Assert expression notNull" doc:id="b2ff3ddf-a565-4743-8f24-37009b6cc8f2" >
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getAllUsersOrByEmailTestResources::assert_success_response
+output application/java
+---
+assert_success_response::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="implementation-test-suite-get-users-by-email-user-not-found-FlowTest" doc:id="2cf3ebb5-e074-436a-9616-e3e7b9acf898" description="Test" ignore="true">
+	<munit:test name="get:\users-by-email-user-not-found-FlowTest" doc:id="2cf3ebb5-e074-436a-9616-e3e7b9acf898" description="Test" ignore="true">
 		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mock when" doc:id="b82a2d70-9cca-4920-a0e5-8d156a02e3cb" processor="flow-ref">
+			<munit-tools:mock-when doc:name="Mock when" doc:id="b82a2d70-9cca-4920-a0e5-8d156a02e3cb" processor="db:select">
 				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="50db31cb-049f-4bde-afa6-eca5eae2d44a" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="2a8cc05a-9a93-4740-83c7-87924be52fdf" attributeName="doc:id" />
 				</munit-tools:with-attributes>
 				<munit-tools:then-return >
 					<munit-tools:payload value="#[[]]" />
@@ -89,16 +115,32 @@ assert_success_response::main({payload: payload, attributes: attributes, vars: v
 			<munit:set-event doc:name="Set Invalid Email param Event" doc:id="c5e33b23-76e5-4794-ba4c-ae0d242faf53" >
 				<munit:attributes value="#[{ method : 'GET', queryParams : { email : &quot;invalidEmail@starshipexplorer.com&quot;}}]" />
 			</munit:set-event>
-			<flow-ref doc:name="Flow-ref to get-users-Flow" doc:id="c55450a3-8fb9-43a4-b91c-7de202351bde" name="get-users-Flow"/>
-		</munit:execution>
+			<try doc:name="Try" doc:id="ca151bea-336c-4ca9-a093-e20787278dbc" >
+				<flow-ref doc:name="Flow-ref to get-users-Flow" doc:id="c55450a3-8fb9-43a4-b91c-7de202351bde" name="get-users-Flow" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="06439ce4-a0a1-42da-b5f6-d579b958abba" type="CUSTOM:USER_NOT_FOUND">
+						<ee:transform doc:name="Transform Message" doc:id="6c22077d-d9ef-4320-9942-b532fe1d6641">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+	"message": "User not Found"
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		
+</munit:execution>
 		<munit:validation >
-			<logger level="INFO" doc:name="Logger" doc:id="23e141e6-2afa-483f-b6ad-3e1688b5a949" message="#[payload]"/>
 			<munit-tools:assert doc:name="Assert expression" doc:id="c71c2919-c63e-4fa0-9200-d3cf017dc8e4" >
-				<munit-tools:that ><![CDATA[#[import * from dw::test::Asserts 
- ---
-payload must equalTo({
-    message : "User not Found"
-})]]]></munit-tools:that>
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getAllUsersOrByEmailTestResources::assert_success_user_not_found
+output application/java
+---
+assert_success_user_not_found::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
 			</munit-tools:assert>
 		</munit:validation>
 	</munit:test>
@@ -153,7 +195,7 @@ assert_success_by_id_user_does_not_exist::main({payload: payload, attributes: at
 			</munit-tools:assert>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="implementation-test-suite-create-user-duplicate-entry-SubFlowTest" doc:id="a80f76d6-ccb8-4145-bf7b-b6c473a79de8" description="Test">
+	<munit:test name="implementation-test-suite-create-user-duplicate-entry-SubFlowTest" doc:id="a80f76d6-ccb8-4145-bf7b-b6c473a79de8" description="Test" ignore="true">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when" doc:id="6ce20802-2070-4111-8262-73b629e949e4" processor="http:request">
 				<munit-tools:with-attributes >
@@ -173,7 +215,18 @@ assert_success_by_id_user_does_not_exist::main({payload: payload, attributes: at
 			<try doc:name="Try" doc:id="a532be57-44b6-4924-9cf8-3cfcd951b678" >
 				<flow-ref doc:name="Flow-ref to create-user-SubFlow" doc:id="27eb2c54-58b5-4df1-a79a-1e54b0de9519" name="create-user-SubFlow" />
 				<error-handler >
-					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="88228363-b11c-4d05-9fb6-5a82801736b1" type="ANY" />
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="88228363-b11c-4d05-9fb6-5a82801736b1" type="DB:QUERY_EXECUTION" >
+						<ee:transform doc:name="Transform Message" doc:id="107a0875-7d76-49f1-8423-9f004a1dc21c" >
+							<ee:message >
+								<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	"message": "DB:QUERY_EXECUTION"
+}]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+					</on-error-continue>
 				</error-handler>
 			</try>
 		
@@ -181,7 +234,7 @@ assert_success_by_id_user_does_not_exist::main({payload: payload, attributes: at
 		<munit:validation >
 			<munit-tools:assert doc:name="Assert expression User Already Exists" doc:id="1ac74165-0080-451a-85eb-d93bc02624bb">
 				<munit-tools:that><![CDATA[#[%dw 2.0
-import create_user::assert_user_already_exists
+import createUser::assert_user_already_exists
 output application/java
 ---
 assert_user_already_exists::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
@@ -216,5 +269,51 @@ assert_success_create::main({payload: payload, attributes: attributes, vars: var
 			</munit-tools:assert>
 		</munit:validation>
 	</munit:test>
+	<munit:test name="implementation-test-suite-create-user-db-mapping-invalid-input-SubFlowTest" doc:id="ad837672-d15c-4cf4-bedc-73c92482d387" description="Test" ignore="true">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="b93e1ae3-d491-41c8-9e3b-bcb2595e39bb" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="sapi-database-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[payload]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="bc46caf5-bb67-4e41-8454-0cc9f329a1f8">
+				<munit:payload value='#[{&#10;  "firstName": "adsda",&#10;  "lastName": "Davis",&#10;  "manager_id": null,&#10;  "address": {&#10;    "street": "Oak Lane",&#10;    "city": "Chicago"&#10;  },&#10;  "dob": "1977-09-12",&#10;  "updated_at": "2023-10-23T16:00:00.000Z",&#10;  "initials": "MD"&#10;}]' />
+			</munit:set-event>
+			<try doc:name="Try" doc:id="62683e0d-3f6b-427b-8427-c459b1a334d7" >
+				<flow-ref doc:name="Flow-ref to create-user-SubFlow" doc:id="b56e7542-a907-435f-9d1b-84fbef15490d" name="create-user-SubFlow" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="ba138312-4a2e-4448-9e92-a615989d6c4c" type="DB:QUERY_EXECUTION" >
+						<ee:transform doc:name="Transform Message" doc:id="0c143f86-772e-4227-b19b-1d3be220f8c1" >
+							<ee:message >
+								<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	"message": "DB:QUERY_EXECUTION"
+}]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression " doc:id="d2e213e8-53cf-4928-9661-417f34f77fc2" >
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import createUser::assert_user_invalid_input
+output application/java
+---
+assert_user_invalid_input::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+	
+
 
 </mule>

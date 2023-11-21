@@ -90,20 +90,20 @@ output application/java
 				</ee:message>
 			</ee:transform>
 		</on-error-propagate> [STUDIO] -->
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e888fff9-9a22-49b4-8958-71a2e5d6298e" type="CUSTOM:USER_ALREDY_EXISTS_CREATE">
+<!-- [STUDIO:"On Error Propagate"]		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e888fff9-9a22-49b4-8958-71a2e5d6298e" type="CUSTOM:USER_ALREDY_EXISTS_CREATE">
 			<set-variable value="409" doc:name="httpStatus" doc:id="670b578d-35e5-40d0-8e41-affdbbbca562" variableName="httpStatus" />
 			<ee:transform doc:name="set Output" doc:id="6e262279-72a2-4d49-a673-3ff86c41ac91">
 				<ee:message>
 					<ee:set-payload><![CDATA[%dw 2.0
 output application/json
----
+&#45;&#45;-
 {
   "message": "User Already Exist"
 }
-]]></ee:set-payload>
+&#93;&#93;></ee:set-payload>
 				</ee:message>
 			</ee:transform>
-		</on-error-propagate>
+		</on-error-propagate> [STUDIO] -->
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="78283897-f90e-4e52-8c29-0fe7a2043bed" type="ANY" >
 			<set-variable value="#[%dw 2.0&#10;output application/java&#10;---&#10;vars.httpStatus default 500]" doc:name="Setze httpStatus" doc:id="cc4cc945-7ece-40b1-a8fc-95e4f9fdc792" variableName="httpStatus" />
 			<set-variable value='#[%dw 2.0&#10;output application/json&#10;&#10;var defaultTypes = {&#10;	"400" : "Bad Request",&#10;	"401" : "Unauthorized",&#10;	"403" : "Forbidden",&#10;	"404" : "Resource does not exists",&#10;	"405" : "Method not allowed",&#10;	"406" : "Not acceptable",&#10;	"407" : "Proxy Authentication Required",&#10;	"415" : "Unsupported Request Content Type",&#10;	"422" : "Unprocessible entity",&#10;	"429" : "Too many requests",&#10;	"500" : "Internal Server Error",&#10;	"503" : "Service Unavailable",&#10;	"504" : "Gateway Timeout"&#10;}&#10;&#10;---&#10;vars.httpStatusType default defaultTypes[(vars.httpStatus as String)]]' doc:name="Setze httpStatusType" doc:id="1ad9c259-21fd-4be5-8a72-01e158760b3b" variableName="httpStatusType" />

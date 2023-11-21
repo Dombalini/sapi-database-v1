@@ -4,4 +4,4 @@ import * from dw::test::Asserts
 output application/java
 
 ---
-payload.message must contain ("DB:QUERY_EXECUTION")
+payload.message must contain ("EXPRESSION")

@@ -65,4 +65,38 @@ try(() ->userNotFound(payload))
 			</ee:message>
 		</ee:transform>
 	</sub-flow>
+	<sub-flow name="selectDB_SubFlow" doc:id="62d9c9ca-2d6e-4e0b-8e9f-a976b8447075" >
+		<db:select doc:name="Select users " doc:id="7240b831-4148-4129-8a4d-3a72c3319a4d" config-ref="Database_Config_User" >
+			<db:sql ><![CDATA[#[vars.sqlQuerry]
+]]></db:sql>
+			<db:input-parameters ><![CDATA[#[vars.inputParams]]]></db:input-parameters>
+		</db:select>
+	</sub-flow>
+	<sub-flow name="insertDB_SubFlow" doc:id="d50a320a-c2f2-489b-84c2-fdace1cd6bfb" >
+		<db:insert doc:name="Insert users" doc:id="22a5644e-e9bb-49bd-820d-bf29f2f2411a" config-ref="Database_Config_User" >
+			<db:sql ><![CDATA[#[vars.sqlQuerry]]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+  email: payload.email,
+  firstName: payload.firstName,
+  lastName: payload.lastName,
+  manager_id: payload.manager_id,
+  street: payload.address.street,
+  city: payload.address.city,
+  dob: payload.dob,
+  updated_at: payload.updated_at
+}]]]></db:input-parameters>
+		</db:insert>
+	</sub-flow>
+	<sub-flow name="updateDB_SubFlow" doc:id="549817a0-2686-4867-a914-96b8dfc65eb1" >
+		<db:update doc:name="Update users" doc:id="5d7b38cb-55ff-42a7-a219-1335881e93a3" config-ref="Database_Config_User" >
+			<db:sql ><![CDATA[#[vars.sqlQuerry]]]></db:sql>
+			<db:input-parameters ><![CDATA[#[vars.inputParams]]]></db:input-parameters>
+		</db:update>
+	</sub-flow>
+	<sub-flow name="deleteDB_SubFlow" doc:id="b1a0eeb1-8667-43a5-92e5-0b5429c81d2c" >
+		<db:delete doc:name="Delete users" doc:id="de9b306e-7d9b-4361-8ad1-02fac0de15ae" config-ref="Database_Config_User" >
+			<db:sql ><![CDATA[#[vars.sqlQuerry]]]></db:sql>
+			<db:input-parameters ><![CDATA[#[vars.inputParams]]]></db:input-parameters>
+		</db:delete>
+	</sub-flow>
 </mule>
