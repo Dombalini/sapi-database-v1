@@ -20,32 +20,182 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="get:\users-FlowTest" doc:id="e304247c-9077-4e51-91c3-43b4240d1bce" description="Test" >
+	<munit:test name="get:\users-flowtest" doc:id="e304247c-9077-4e51-91c3-43b4240d1bce" description="Test">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when db:select" doc:id="a5dba744-f732-4eb8-8f45-196eb51a9e17" processor="db:select" >
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="fc217d3d-39db-4293-864b-bf4f910d599e" attributeName="doc:id" />
 				</munit-tools:with-attributes>
 				<munit-tools:then-return >
-					<munit-tools:payload value='#[%dw 2.0&#10;output application/java&#10;---&#10;readUrl("classpath://getAllUsersOrByEmailTestResources/mock_users_payload.dwl")]' />
+					<munit-tools:payload value='#[%dw 2.0&#10;output application/java&#10;---&#10;readUrl("classpath://test_resources/mock_users_payload.dwl")]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:spy doc:name="Spy" doc:id="309f889a-69da-4053-917c-731efdc73edb" processor="choice" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="a2e66851-ae67-4ef6-91e2-83aa904a5f23" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<munit-tools:assert-equals doc:name='Assert equals payload ""' doc:id="2728b296-f4ba-49aa-839a-9adef7c19582" actual="#[payload]" expected='#[""]' />
+				</munit-tools:before-call>
+				<munit-tools:after-call >
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="d143bc2f-d241-4a74-a1eb-64725f044bac" actual="#[payload]" expected='#[%dw 2.0&#10;output application/java&#10;---&#10;readUrl("classpath://test_resources/mock_users_payload.dwl")]' />
+				</munit-tools:after-call>
+			</munit-tools:spy>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event querryParam Email" doc:id="ded4bfc1-3297-403a-95d5-f1a251d212d0" >
+				<munit:attributes value='#[readUrl("classpath://test_resources/set_input_event_email.dwl")]' />
+			</munit:set-event>
+			<flow-ref doc:name="get-users-flow" doc:id="32b48358-9af9-4c49-9610-c286a3a94c40" name="get-users-flow" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call flow-ref from Choice" doc:id="642839d3-00cf-40b0-8b9a-fd544ba771a0" processor="flow-ref" atLeast="#[1]" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ef394e80-937e-428b-9cfd-6b623c866be3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:assert-equals doc:name="Assert equals expected payload" doc:id="cee86745-7456-4783-b60c-63cac542e916" actual="#[payload]" expected='#[[{&#10;        "id": 2,&#10;        "email": "jack@starshipexplorer.com",&#10;        "firstName": "Jack",&#10;        "lastName": "Steele",&#10;        "manager_id": 1,&#10;        "street": "Galaxy Lane",&#10;        "city": "Alpha Centauri",&#10;        "dob": "2970-03-10T00:00:00",&#10;        "updated_at": "2023-11-09T10:27:35",&#10;        "initials": "JS"&#10;    }]]' />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\user-by-id-subflowtest" doc:id="7bb277cf-ec49-48ec-811e-c05dbfa6d435" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when db:select" doc:id="bf31fccf-686d-4095-ba7b-fe9188355ff6" processor="db:select">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7240b831-4148-4129-8a4d-3a72c3319a4d" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[[&#10;    {&#10;        "id": 12,&#10;        "email": "michael.davis@email.com",&#10;        "firstName": "Michael",&#10;        "lastName": "Davis",&#10;        "manager_id": 1,&#10;        "street": "Oak Lane",&#10;        "city": "Chicago",&#10;        "dob": "1977-09-12T00:00:00",&#10;        "updated_at": "2023-11-09T10:30:53",&#10;        "initials": "MD"&#10;    }&#10;]]' />
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution >
-			<munit:set-event doc:name="Set Event querryParam Email" doc:id="ded4bfc1-3297-403a-95d5-f1a251d212d0" >
-				<munit:attributes value='#[readUrl("classpath://getAllUsersOrByEmailTestResources/set_input_event_email.dwl")]' />
+			<munit:set-event doc:name="Set Event uriParam id" doc:id="be6d5e9e-247f-4aaa-82a0-66fc78205568" >
+				<munit:attributes value='#[{&#10;                    "uriParams": {&#10;                        "id": 12&#10;                    }&#10;                }]' />
 			</munit:set-event>
-			<flow-ref doc:name="Flow-ref to get-users-Flow" doc:id="32b48358-9af9-4c49-9610-c286a3a94c40" name="get-users-Flow" />
+			<flow-ref doc:name="get-user-by-id-subflow" doc:id="bfb33f46-97c2-4359-a3eb-26925ad9577d" name="get-user-by-id-subflow" />
 		</munit:execution>
 		<munit:validation >
-			<munit-tools:verify-call doc:name="Verify call" doc:id="642839d3-00cf-40b0-8b9a-fd544ba771a0" processor="choice" atLeast="#[1]" >
+			<munit-tools:verify-call doc:name="Verify call set Output from Choice" doc:id="9294c86f-1cc5-4ee0-af2b-18353a0fc693" processor="flow-ref">
 				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="a2e66851-ae67-4ef6-91e2-83aa904a5f23" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="ef394e80-937e-428b-9cfd-6b623c866be3" attributeName="doc:id" />
 				</munit-tools:with-attributes>
 			</munit-tools:verify-call>
-			<munit-tools:assert-equals doc:name="Assert equals" doc:id="cee86745-7456-4783-b60c-63cac542e916" actual="#[payload]" expected='#[{&#10;        "id": 2,&#10;        "email": "jack@starshipexplorer.com",&#10;        "firstName": "Jack",&#10;        "lastName": "Steele",&#10;        "manager_id": 1,&#10;        "street": "Galaxy Lane",&#10;        "city": "Alpha Centauri",&#10;        "dob": "2970-03-10T00:00:00",&#10;        "updated_at": "2023-11-09T10:27:35",&#10;        "initials": "JS"&#10;    }]' />
+			<munit-tools:assert-equals doc:name="Assert equals expected paylaod" doc:id="d61fccac-1693-48b8-bad7-38f39138de7e" expected='#[[&#10;    {&#10;        "id": 12,&#10;        "email": "michael.davis@email.com",&#10;        "firstName": "Michael",&#10;        "lastName": "Davis",&#10;        "manager_id": 1,&#10;        "street": "Oak Lane",&#10;        "city": "Chicago",&#10;        "dob": "1977-09-12T00:00:00",&#10;        "updated_at": "2023-11-09T10:30:53",&#10;        "initials": "MD"&#10;    }&#10;]]' actual="#[payload]"/>
 		</munit:validation>
 	</munit:test>
+	<munit:test name="delete:\user-by-id-subflowtest" doc:id="902f15a9-dc77-4b05-a2c7-8a56a58af101" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when db:delete" doc:id="ff91779b-18d6-43b2-8e2e-a0ecd45b10f9" processor="db:delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="de9b306e-7d9b-4361-8ad1-02fac0de15ae" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[true]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:spy doc:name="Spy" doc:id="94637393-b874-4184-8232-7df027a06268" processor="choice" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="c3f8620a-36ff-46db-bad1-8f2f4803b81d" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<munit-tools:assert-equals doc:name="Assert equals payload false" doc:id="cadc918d-3583-4f08-898a-1cf238d36eaf" actual="#[payload]" expected="true" />
+				</munit-tools:before-call>
+				<munit-tools:after-call >
+					<munit-tools:assert-equals doc:name="Assert equals httpStatus" doc:id="3fdb7890-7336-440a-8d5b-32b46a4bd5c4" actual="#[vars.httpStatus]" expected="204" />
+				</munit-tools:after-call>
+			</munit-tools:spy>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event uriParam id" doc:id="f503e5d2-980f-4cad-98ec-9bd69a429f7c" >
+				<munit:attributes value='#[{&#10;                    "uriParams": {&#10;                        "id": 115&#10;                    }&#10;                }]' />
+			</munit:set-event>
+			<flow-ref doc:name="delete-user-by-id-subflow" doc:id="ba9cea68-db55-470e-a02a-855abbc71063" name="delete-user-by-id-subflow" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call set httpStatus after Choice" doc:id="d21da3b9-0653-46f0-bc62-da8b7bc13cea" processor="set-variable">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="5ebe914b-8e19-4a08-a73b-079bf2c50c57" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:assert-equals doc:name="Assert equals httpStatus" doc:id="70529e28-9de0-4c20-b748-2c67932be4d4" actual="#[vars.httpStatus]" expected="204"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="update:\user-by-id-subflowtest" doc:id="452e1331-27ac-4647-a4c0-daf06a417b2c" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when db:update" doc:id="c6ef3643-2c5a-4206-b095-66b83fab8fbd" processor="db:update" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="5d7b38cb-55ff-42a7-a219-1335881e93a3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[{&#10;  "generatedKeys": {&#10;    &#10;  },&#10;  "affectedRows": 1&#10;}]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:spy doc:name="Spy" doc:id="d531d72b-a128-43be-9dc4-dff4aec22845" processor="choice" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="e1417d2c-194f-4f20-8d3d-4213cba84428" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<munit-tools:assert-equals doc:name="Assert equals expected payload" doc:id="7b6c5b69-eab6-4cc9-8fc2-37cf290effed" actual="#[payload]" expected='#[{&#10;  "email": "reerre@email.com",&#10;  "firstName": "rere",&#10;  "lastName": "Davis",&#10;  "manager_id": null,&#10;  "address": {&#10;    "street": "Oak Lane",&#10;    "city": "Chicago"&#10;  },&#10;  "dob": "1977-09-12",&#10;  "updated_at": "2023-10-23T16:00:00.000Z",&#10;  "initials": "MD"&#10;}]' message="error" />
+				</munit-tools:before-call>
+				<munit-tools:after-call >
+					<munit-tools:assert-equals doc:name="Assert equals affectedRows" doc:id="3a8056f5-7fac-455c-9e93-cf1a2c84da8b" actual="#[payload]" expected='#[{&#10;  "generatedKeys": {&#10;    &#10;  },&#10;  "affectedRows": 0&#10;}]' message="error" />
+				</munit-tools:after-call>
+			</munit-tools:spy>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event user payload and uriParams" doc:id="d72575cd-0b34-434b-9eb4-ecdccfb0f948" >
+				<munit:payload value='#[{&#10;                    "email": "reerre@email.com",&#10;                    "firstName": "deafeafd",&#10;                    "lastName": "Davis",&#10;                    "manager_id": null,&#10;                    "address": {&#10;                        "street": "Oak Lane",&#10;                        "city": "Chicago"&#10;                    },&#10;                    "dob": "1977-09-12",&#10;                    "updated_at": "2023-10-23T16:00:00.000Z",&#10;                    "initials": "MD"&#10;                }]' />
+				<munit:attributes value='#[{&#10;                    "uriParams": {&#10;                        "Id": 115&#10;                    }&#10;                }]' />
+			</munit:set-event>
+			<flow-ref doc:name="update-user-by-id-subflow" doc:id="258e849f-38df-4a8d-8b59-1a9c6a79d786" name="update-user-by-id-subflow" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call set output payload from choice" doc:id="dda763ad-cca4-44e5-b705-3aeb7128425d" processor="ee:transform" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="output Payload" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:assert-equals doc:name='Assert equals "User data updated successfully"' doc:id="995982d1-419e-4c10-9138-73859e0d6f56" actual="#[payload.message]" expected='#["User data updated successfully"]' />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="post:\create-user-subflowtest" doc:id="e754fb6b-6623-4e5a-99a9-9dd3f16fe232" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when db:insert" doc:id="50101121-4cb5-4dad-85b1-27c4c5a3f8e0" processor="db:insert" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="22a5644e-e9bb-49bd-820d-bf29f2f2411a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[{&#10;  "generatedKeys": {&#10;    &#10;  },&#10;  "affectedRows": 0&#10;}]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:spy doc:name="Spy" doc:id="c0238ea1-51e7-462d-96fe-b2bdcbe30020" processor="choice" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ba9ac53f-cb2e-4eba-9b60-5b1dbc5c19f8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<munit-tools:assert-equals doc:name="Assert equals expected payload" doc:id="08134dc2-a861-464b-ac88-2f0212dd0e4c" actual="#[payload]" expected='#[{&#10;  "email": "newguy@email.com",&#10;  "firstName": "adsda",&#10;  "lastName": "Davis",&#10;  "manager_id": null,&#10;  "address": {&#10;    "street": "Oak Lane",&#10;    "city": "Chicago"&#10;  },&#10;  "dob": "1977-09-12",&#10;  "updated_at": "2023-10-23T16:00:00.000Z",&#10;  "initials": "MD"&#10;}]' message="error" />
+				</munit-tools:before-call>
+				<munit-tools:after-call >
+					<munit-tools:assert-equals doc:name="Assert equals affectedRows" doc:id="a22b3bc6-de23-46bd-be55-98fe9cac43c9" actual="#[payload]" expected='#[{&#10;  "generatedKeys": {&#10;    &#10;  },&#10;  "affectedRows": 0&#10;}]' message="error" />
+				</munit-tools:after-call>
+			</munit-tools:spy>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event Create User payload" doc:id="8f2754c0-061e-43e2-be47-56f250e27c8c" >
+				<munit:payload value='#[{&#10;  "email": "newguy@email.com",&#10;  "firstName": "adsda",&#10;  "lastName": "Davis",&#10;  "manager_id": null,&#10;  "address": {&#10;    "street": "Oak Lane",&#10;    "city": "Chicago"&#10;  },&#10;  "dob": "1977-09-12",&#10;  "updated_at": "2023-10-23T16:00:00.000Z",&#10;  "initials": "MD"&#10;}]' />
+			</munit:set-event>
+			<flow-ref doc:name="create-user-subflow" doc:id="3a3d4c9a-5de2-49dc-b203-03e717e3b85a" name="create-user-subflow" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call on set Output from Choice" doc:id="1dec74bc-1e1c-491b-8711-a11663ee111f" processor="ee:transform" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="set Output" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:assert-equals doc:name='Assert equals "User Successfully Created"' doc:id="f6240065-424c-421e-b6e0-1cf91479bc0c" actual="#[payload.message]" expected='#["User Successfully Created"]' />
+		</munit:validation>
+	</munit:test>
+
 	
 
 

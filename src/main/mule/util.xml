@@ -5,7 +5,7 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-	<sub-flow name="choice-SubFlow" doc:id="21dd861a-fe7d-4483-9249-5d006c4f1ab8" >
+	<sub-flow name="choice-subflow" doc:id="21dd861a-fe7d-4483-9249-5d006c4f1ab8" >
 		<choice doc:name="Return payload or Error" doc:id="58067b64-ccf2-4bec-850e-f5364b72bc47" >
 			<when expression="#[payload.success == true]" >
 				<flow-ref doc:name="output-payload" doc:id="ef394e80-937e-428b-9cfd-6b623c866be3" name="output-payload"/>
@@ -46,16 +46,13 @@ payload.result map ( payload , indexOfPayload ) -> {
 			</ee:message>
 		</ee:transform>
 	</sub-flow>
-	<sub-flow name="id-variable" doc:id="19a4314d-5d4e-4334-8fdf-637676862ed2" >
-		<set-variable value='#[attributes.uriParams."Id"]' doc:name="id" doc:id="9228f210-580b-46da-8e10-fcb1af39b892" variableName="id" />
-	</sub-flow>
-	<sub-flow name="fail-Function" doc:id="407e254a-ecf0-4f6a-92b6-385df2ccb860" >
+	<sub-flow name="fail-function" doc:id="407e254a-ecf0-4f6a-92b6-385df2ccb860" >
 		<ee:transform doc:name="fail Function" doc:id="87abf7a6-f8cc-4629-83e1-78401cb3e448" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0 
 output application/json
 import * from dw::Runtime
-fun userNotFound(message) = if(payload == [] )
+fun userNotFound(message) = if(payload == [])
 fail("User Not Found")
 else
 payload
@@ -65,26 +62,26 @@ try(() ->userNotFound(payload))
 			</ee:message>
 		</ee:transform>
 	</sub-flow>
-	<sub-flow name="selectDB_SubFlow" doc:id="62d9c9ca-2d6e-4e0b-8e9f-a976b8447075" >
+	<sub-flow name="selectdb-subflow" doc:id="62d9c9ca-2d6e-4e0b-8e9f-a976b8447075" >
 		<db:select doc:name="Select users " doc:id="7240b831-4148-4129-8a4d-3a72c3319a4d" config-ref="Database_Config_User" >
 			<db:sql ><![CDATA[#[vars.sqlQuerry]
 ]]></db:sql>
 			<db:input-parameters ><![CDATA[#[vars.inputParams]]]></db:input-parameters>
 		</db:select>
 	</sub-flow>
-	<sub-flow name="insertDB_SubFlow" doc:id="d50a320a-c2f2-489b-84c2-fdace1cd6bfb" >
+	<sub-flow name="insertdb-subflow" doc:id="d50a320a-c2f2-489b-84c2-fdace1cd6bfb" >
 		<db:insert doc:name="Insert users" doc:id="22a5644e-e9bb-49bd-820d-bf29f2f2411a" config-ref="Database_Config_User" >
 			<db:sql ><![CDATA[#[vars.sqlQuerry]]]></db:sql>
 			<db:input-parameters ><![CDATA[#[vars.inputParams]]]></db:input-parameters>
 		</db:insert>
 	</sub-flow>
-	<sub-flow name="updateDB_SubFlow" doc:id="549817a0-2686-4867-a914-96b8dfc65eb1" >
+	<sub-flow name="updatedb_subflow" doc:id="549817a0-2686-4867-a914-96b8dfc65eb1" >
 		<db:update doc:name="Update users" doc:id="5d7b38cb-55ff-42a7-a219-1335881e93a3" config-ref="Database_Config_User" >
 			<db:sql ><![CDATA[#[vars.sqlQuerry]]]></db:sql>
 			<db:input-parameters ><![CDATA[#[vars.inputParams]]]></db:input-parameters>
 		</db:update>
 	</sub-flow>
-	<sub-flow name="deleteDB_SubFlow" doc:id="b1a0eeb1-8667-43a5-92e5-0b5429c81d2c" >
+	<sub-flow name="deletedb_subflow" doc:id="b1a0eeb1-8667-43a5-92e5-0b5429c81d2c" >
 		<db:delete doc:name="Delete users" doc:id="de9b306e-7d9b-4361-8ad1-02fac0de15ae" config-ref="Database_Config_User" >
 			<db:sql ><![CDATA[#[vars.sqlQuerry]]]></db:sql>
 			<db:input-parameters ><![CDATA[#[vars.inputParams]]]></db:input-parameters>
