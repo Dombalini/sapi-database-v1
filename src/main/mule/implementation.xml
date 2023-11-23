@@ -45,21 +45,21 @@ output application/json
 				</ee:transform>
 			</when>
 			<otherwise>
-				<set-variable value="409" doc:name="httpStatus" doc:id="189c3930-d39a-4d22-b598-153588213f38" variableName="httpStatus" />
-				<ee:transform doc:name="set Output" doc:id="953984f8-de51-4808-9adc-4d550c94e2be">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
+				<ee:transform doc:name="set Output" doc:id="1e16ee69-9720-428d-87d6-06bd3c89ff6a">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
   "message": "User Already Exist"
 }
 ]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
+			</ee:message>
+		</ee:transform>
+				<set-variable value="409" doc:name="httpStatus" doc:id="ad9935f7-3169-4410-8db2-2c80a0dd17c2" variableName="httpStatus" />
 			</otherwise>
 		</choice>
-		<logger level="INFO" doc:name='Log "Flow end"' doc:id="feb37c32-d577-44ed-bfcb-279be2b2c906" message='End Log payload HTTP-post:\users:sapi-database' category="${system.groupId}.create-user-SubFlow.message"/>
+		<logger level="INFO" doc:name='Log "Flow end"' doc:id="feb37c32-d577-44ed-bfcb-279be2b2c906" message="End Log payload HTTP-post:\users:sapi-database" category="${system.groupId}.create-user-SubFlow.message" />
 	
 </sub-flow>
 	<flow name="get-users-flow" doc:id="71d42d93-7682-4188-ae0f-dc9498afff9a" >
@@ -142,7 +142,7 @@ output application/json
 		<set-variable value='#["UPDATE user&#10;        SET&#10;            email = :email,&#10;            firstName = :firstName,&#10;            lastName = :lastName,&#10;            manager_id = :manager_id,&#10;            street = :street,&#10;            city = :city,&#10;            dob = :dob,&#10;            updated_at = NOW()&#10;        WHERE&#10;            id = :id;"]' doc:name="sqlQuerry" doc:id="dba04767-16dc-43c6-81b1-54f0b289728f" variableName="sqlQuerry" />
 		<set-variable value='#[%dw 2.0&#10;output application/java&#10;---&#10;{&#10;    "id": attributes.uriParams."Id",&#10;    "email": payload.email,&#10;    "firstName": payload.firstName,&#10;    "lastName": payload.lastName,&#10;    "manager_id": payload.manager_id,&#10;    "street": payload.address.street,&#10;    "city": payload.address.city,&#10;    "dob": payload.dob,&#10;    "updated_at": payload.updated_at&#10;}]' doc:name="inputParams" doc:id="4c04d359-e2d2-4e6a-9fbf-9fa921185d50" variableName="inputParams"/>
 		<flow-ref doc:name="updatedb_subflow" doc:id="377b2282-4da2-485d-aece-947c57084bb9" name="updatedb_subflow"/>
-		<choice doc:name="Choice" doc:id="e1417d2c-194f-4f20-8d3d-4213cba84428" >
+		<choice doc:name="Update or Error" doc:id="e1417d2c-194f-4f20-8d3d-4213cba84428" >
 			<when expression="#[payload.affectedRows != null and payload.affectedRows &gt; 0]" >
 				<ee:transform doc:name="output Payload" doc:id="5e6940e7-cc5b-4f90-90e8-b61b73cecf82" >
 					<ee:message >
