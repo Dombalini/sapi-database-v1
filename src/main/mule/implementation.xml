@@ -31,7 +31,7 @@ try(() ->userNotFound(payload))
 			</ee:message>
 		</ee:transform>
 		<choice doc:name="Create or Error" doc:id="ba9ac53f-cb2e-4eba-9b60-5b1dbc5c19f8">
-			<when expression="payload.success == true">
+			<when expression="#[payload.success == true]">
 				<ee:transform doc:name="set Output" doc:id="5572eea2-84da-469d-bd3a-96d59872058e">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
