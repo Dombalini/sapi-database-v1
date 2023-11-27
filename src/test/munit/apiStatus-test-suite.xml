@@ -168,17 +168,6 @@
 					<munit-tools:payload value='#[{&#10;  "generatedKeys": {&#10;    &#10;  },&#10;  "affectedRows": 0&#10;}]' />
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
-			<munit-tools:spy doc:name="Spy" doc:id="c0238ea1-51e7-462d-96fe-b2bdcbe30020" processor="choice" >
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="ba9ac53f-cb2e-4eba-9b60-5b1dbc5c19f8" attributeName="doc:id" />
-				</munit-tools:with-attributes>
-				<munit-tools:before-call >
-					<munit-tools:assert-equals doc:name="Assert equals expected payload" doc:id="08134dc2-a861-464b-ac88-2f0212dd0e4c" actual="#[payload]" expected='#[{&#10;  "email": "newguy@email.com",&#10;  "firstName": "adsda",&#10;  "lastName": "Davis",&#10;  "manager_id": null,&#10;  "address": {&#10;    "street": "Oak Lane",&#10;    "city": "Chicago"&#10;  },&#10;  "dob": "1977-09-12",&#10;  "updated_at": "2023-10-23T16:00:00.000Z",&#10;  "initials": "MD"&#10;}]' message="error" />
-				</munit-tools:before-call>
-				<munit-tools:after-call >
-					<munit-tools:assert-equals doc:name="Assert equals affectedRows" doc:id="a22b3bc6-de23-46bd-be55-98fe9cac43c9" actual="#[payload]" expected='#[{&#10;  "generatedKeys": {&#10;    &#10;  },&#10;  "affectedRows": 0&#10;}]' message="error" />
-				</munit-tools:after-call>
-			</munit-tools:spy>
 		</munit:behavior>
 		<munit:execution >
 			<munit:set-event doc:name="Set Event Create User payload" doc:id="8f2754c0-061e-43e2-be47-56f250e27c8c" >
@@ -187,7 +176,7 @@
 			<flow-ref doc:name="create-user-subflow" doc:id="3a3d4c9a-5de2-49dc-b203-03e717e3b85a" name="create-user-subflow" />
 		</munit:execution>
 		<munit:validation >
-			<munit-tools:verify-call doc:name="Verify call on set Output from Choice" doc:id="1dec74bc-1e1c-491b-8711-a11663ee111f" processor="ee:transform" >
+			<munit-tools:verify-call doc:name="Verify call on set Output " doc:id="1dec74bc-1e1c-491b-8711-a11663ee111f" processor="ee:transform" >
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="set Output" attributeName="doc:name" />
 				</munit-tools:with-attributes>

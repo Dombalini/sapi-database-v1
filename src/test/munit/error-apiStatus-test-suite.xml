@@ -131,17 +131,6 @@
 					<munit-tools:error typeId="DB:QUERY_EXECUTION" />
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
-			<munit-tools:spy doc:name="Spy" doc:id="d91df83a-3a6a-42bc-bef7-25175a0441d5" processor="choice" >
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="ba9ac53f-cb2e-4eba-9b60-5b1dbc5c19f8" attributeName="doc:id" />
-				</munit-tools:with-attributes>
-				<munit-tools:before-call >
-					<munit-tools:assert-equals doc:name="Assert equals expected payload" doc:id="3a4087ec-cfa0-4169-8120-e47ebfbd20b3" actual="#[payload.success]" expected='#[false]' message="error" />
-				</munit-tools:before-call>
-				<munit-tools:after-call >
-					<munit-tools:assert-equals doc:name="Assert equals affectedRows" doc:id="1889dee9-47f3-4827-972f-ea640c9e945a" actual="#[payload]" expected='#[{&#10;  "generatedKeys": {&#10;    &#10;  },&#10;  "affectedRows": 1&#10;}]' message="error" />
-				</munit-tools:after-call>
-			</munit-tools:spy>
 		</munit:behavior>
 		<munit:execution >
 			<munit:set-event doc:name="Set Event Create User payload" doc:id="7f0f3bd9-db54-4998-9278-c00178afe313">
@@ -150,9 +139,9 @@
 			<flow-ref doc:name="create-user-subflow" doc:id="613e264a-6c07-4c8b-bee3-a28751e4f87c" name="create-user-subflow" />
 		</munit:execution>
 		<munit:validation >
-			<munit-tools:verify-call doc:name="Verify call on set Output from Choice" doc:id="7bf2f29e-f9b0-4f0d-89ed-accddf4559f5" processor="ee:transform" >
+			<munit-tools:verify-call doc:name="Verify call on set Output from On error Continue" doc:id="7bf2f29e-f9b0-4f0d-89ed-accddf4559f5" processor="ee:transform" >
 				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="1e16ee69-9720-428d-87d6-06bd3c89ff6a" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="7f1df983-3e0f-4b3a-bcec-344085ef45f3" attributeName="doc:id" />
 				</munit-tools:with-attributes>
 			</munit-tools:verify-call>
 			<munit-tools:assert-equals doc:name='Assert equals "User Successfully Created"' doc:id="f0233856-f495-41b9-891f-7643de57b5ef" actual="#[payload.message]" expected='#["User Already Exist"]' />

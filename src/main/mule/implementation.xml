@@ -5,14 +5,14 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-	<sub-flow name="create-user-subflow" doc:id="6f0af488-68bd-4bc2-98b9-f696ea063088" >
-		<set-variable value='#["INSERT INTO user (email, firstName, lastName, manager_id, street, city, dob, updated_at)&#10;VALUES (:email, :firstName, :lastName, :manager_id, :street, :city, :dob, NOW());"]' doc:name="sqlQuerry" doc:id="ac47f652-1f27-4d97-9b65-966b76a9f985" variableName="sqlQuerry" />
-		<set-variable value='#[{&#10;  "email": payload.email,&#10;  "firstName": payload.firstName,&#10;  "lastName": payload.lastName,&#10;  "manager_id": payload.manager_id,&#10;  "street": payload.address.street,&#10;  "city": payload.address.city,&#10;  "dob": payload.dob,&#10;  "updated_at": payload.updated_at&#10;}]' doc:name="inputParams" doc:id="2a3cafed-6008-4999-ba99-cb4eda46fa73" variableName="inputParams"/>
+<!-- [STUDIO:"create-user-subflow"]	<sub-flow name="create-user-subflow" doc:id="6f0af488-68bd-4bc2-98b9-f696ea063088" >
+		<set-variable value='#["INSERT INTO user (email, firstName, lastName, manager_id, street, city, dob, updated_at)&#10;VALUES (:email, :firstName, :lastName, :manager_id, :street, :city, :dob, NOW());"&#93;' doc:name="sqlQuerry" doc:id="ac47f652-1f27-4d97-9b65-966b76a9f985" variableName="sqlQuerry" />
+		<set-variable value='#[{&#10;  "email": payload.email,&#10;  "firstName": payload.firstName,&#10;  "lastName": payload.lastName,&#10;  "manager_id": payload.manager_id,&#10;  "street": payload.address.street,&#10;  "city": payload.address.city,&#10;  "dob": payload.dob,&#10;  "updated_at": payload.updated_at&#10;}&#93;' doc:name="inputParams" doc:id="2a3cafed-6008-4999-ba99-cb4eda46fa73" variableName="inputParams"/>
 		<try doc:name="Try" doc:id="97f3473b-7e8c-4ccc-a004-409e51808a9d" >
 			<flow-ref doc:name="insertdb-subflow" doc:id="003cc3b5-23fa-46d4-9b2f-b133ed937f70" name="insertdb-subflow" />
 			<error-handler >
 				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="5b903ff6-12ff-46f0-8f66-54338d940555" type="DB:QUERY_EXECUTION">
-					<set-payload value="#[payload == false]" doc:name="Set Payload == false" doc:id="969956cc-348c-4227-b346-7bdc7477fefc" />
+					<set-payload value="#[payload == false&#93;" doc:name="Set Payload == false" doc:id="969956cc-348c-4227-b346-7bdc7477fefc" />
 				</on-error-continue>
 			</error-handler>
 		</try>
@@ -25,22 +25,22 @@ fun userNotFound(message) = if(payload == false)
 fail("User Not Found")
 else
 payload
----
+&#45;&#45;-
 try(() ->userNotFound(payload))
-]]></ee:set-payload>
+&#93;&#93;></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<choice doc:name="Create or Error" doc:id="ba9ac53f-cb2e-4eba-9b60-5b1dbc5c19f8">
-			<when expression="#[payload.success == true]">
+			<when expression="#[payload.success == true&#93;">
 				<ee:transform doc:name="set Output" doc:id="5572eea2-84da-469d-bd3a-96d59872058e">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
----
+&#45;&#45;-
 {
   "message": "User Successfully Created"
 }
-]]></ee:set-payload>
+&#93;&#93;></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 			</when>
@@ -49,11 +49,11 @@ output application/json
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
----
+&#45;&#45;-
 {
   "message": "User Already Exist"
 }
-]]></ee:set-payload>
+&#93;&#93;></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 				<set-variable value="409" doc:name="httpStatus" doc:id="ad9935f7-3169-4410-8db2-2c80a0dd17c2" variableName="httpStatus" />
@@ -61,7 +61,7 @@ output application/json
 		</choice>
 		<logger level="INFO" doc:name='Log "Flow end"' doc:id="feb37c32-d577-44ed-bfcb-279be2b2c906" message="End Log payload HTTP-post:\users:sapi-database" category="${system.groupId}.create-user-SubFlow.message" />
 	
-</sub-flow>
+</sub-flow> [STUDIO] -->
 	<flow name="get-users-flow" doc:id="71d42d93-7682-4188-ae0f-dc9498afff9a" >
 		<choice doc:name="Select by Email or Select all" doc:id="a2e66851-ae67-4ef6-91e2-83aa904a5f23" >
 			<when expression='#[attributes.queryParams."email" != null]' >
@@ -171,4 +171,38 @@ output application/json
 		</choice>
 		<logger level="INFO" doc:name='Log "Flow end"' doc:id="18033d74-4a48-4f1e-bf92-5026d73ab497" message="end Log payload HTTP-get:\users\{id}:sapi-database " category="${system.groupId}.update-user-by-id-SubFlow.payload"/>
 	</sub-flow>
+	<flow name="create-user-subflow" doc:id="9e76b556-ed00-4243-9bae-b36f4a3e73d2" >
+		<set-variable value='#["INSERT INTO user (email, firstName, lastName, manager_id, street, city, dob, updated_at)&#10;VALUES (:email, :firstName, :lastName, :manager_id, :street, :city, :dob, NOW());"]' doc:name="sqlQuerry" doc:id="166fa434-f5ba-4b13-a01b-0671478d879c" variableName="sqlQuerry" />
+		<set-variable value='#[{&#10;  "email": payload.email,&#10;  "firstName": payload.firstName,&#10;  "lastName": payload.lastName,&#10;  "manager_id": payload.manager_id,&#10;  "street": payload.address.street,&#10;  "city": payload.address.city,&#10;  "dob": payload.dob,&#10;  "updated_at": payload.updated_at&#10;}]' doc:name="inputParams" doc:id="5d594c36-b29c-485b-ba87-e230bf996cff" variableName="inputParams" />
+		<flow-ref doc:name="insertdb-subflow" doc:id="10ea56f8-680e-47e1-ae4d-1868cc086e82" name="insertdb-subflow" />
+		<ee:transform doc:name="set Output" doc:id="1ea40163-db5b-4f92-b0cd-bf86bba715fb">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "message": "User Successfully Created"
+}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+		<logger level="INFO" doc:name='Log "Flow end"' doc:id="e7991fe4-d676-4fcb-b214-5ce6c3862e92" message="End Log payload HTTP-post:\users:sapi-database" category="${system.groupId}.create-user-SubFlow.message" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="9d8d1986-0e21-4f2b-940b-ecf9833210ac" type="DB:QUERY_EXECUTION" >
+				<ee:transform doc:name="set Output" doc:id="7f1df983-3e0f-4b3a-bcec-344085ef45f3" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "message": "User Already Exist"
+}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<set-variable value="409" doc:name="httpStatus" doc:id="e90ca476-2d7a-40c3-a3eb-57b7bebac450" variableName="httpStatus" />
+			
+</on-error-continue>
+		</error-handler>
+	</flow>
 </mule>
