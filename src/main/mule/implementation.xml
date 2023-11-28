@@ -5,123 +5,49 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-<flow name="main-method" doc:id="477633dd-d232-4016-8747-5bb3d158e9e2">
-		<set-variable value='#[correlationId]' doc:name="correlationId" doc:id="e67e3b88-6fff-43d1-91b0-61e8a382f455" variableName="correlationId"/>
-		<ee:transform doc:name="request from sapi or papi">
-        <ee:message>
-            <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-if (vars.correlationId == "papi") 
-       payload
-else 
-    ("error" : "EXPRESSION")
-]]></ee:set-payload>
-        </ee:message>
-        <ee:variables>
-            <ee:set-variable variableName="httpStatus" ><![CDATA[#[if (sizeOf(payload) > 0) 200 else 404]]]></ee:set-variable>
-        </ee:variables>
-    </ee:transform>
-		<choice doc:name="Choice" doc:id="a0338691-1a35-45eb-8431-24f14cf8e1cf" >
-			<when expression='#[vars.correlationId == "papi"]'>
-				<flow-ref doc:name="Flow Reference" doc:id="11db7f96-17ae-4651-b50d-40106c7c76f1" name="get-users-flow" />
+	<flow name="get-users-flow" doc:id="71d42d93-7682-4188-ae0f-dc9498afff9a">
+		<set-variable value="#[correlationId]" doc:name="correlationId" doc:id="6ee7ad5e-ff27-4576-aebd-08fa103e28dd" variableName="correlationId" />
+		<choice doc:name="Select by Email or Select all" doc:id="a2e66851-ae67-4ef6-91e2-83aa904a5f23">
+			<when expression='#[attributes.queryParams."email" != null]'>
+				<flow-ref doc:name="get-users-by-email-subflow" doc:id="6ef628d7-54e0-46f5-8dcf-99eabe420ea5" name="get-users-by-email-subflow" />
 
 			</when>
 			<otherwise>
-				<raise-error doc:name="Raise error" doc:id="9a97249f-baec-4660-9974-edf076edfca6" type="EXPRESSION"/>
+				<flow-ref doc:name="get-all-users-subflow" doc:id="917dbad1-6bdd-4853-a08c-9ac7f1a7d48b" name="get-all-users-subflow" />
+
+			</otherwise>
+		
+</choice>
+	
+</flow>
+	<sub-flow name="get-users-by-email-subflow" doc:id="28b81f26-a286-4ebc-bb79-da2bba0a00e3">
+		<set-variable value='#["select * from user where email= :email;"]' doc:name="sqlQuerry" doc:id="69c76d57-26c8-455d-9c4e-d25bb4b74697" variableName="sqlQuerry" />
+		<set-variable value='#[{&#10;email: attributes.queryParams."email"&#10;}]' doc:name="inputParams" doc:id="6a8bc27c-3a96-4896-8a51-e28d2211abf5" variableName="inputParams" />
+		<flow-ref doc:name="selectdb-subflow" doc:id="10c70ead-c63d-428d-902e-18bca0a3a947" name="selectdb-subflow" />
+		<choice doc:name="Choice" doc:id="f9ccfce2-88cd-40d7-9d25-b7b5bffde522">
+			<when expression='#[vars.correlationId == "papi" and isEmpty(payload) == true]'>
+				<ee:transform doc:name="empty Array" doc:id="efa8e670-7645-44c9-9200-18e2787001a0">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[]]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise>
+				<flow-ref doc:name="fail-function" doc:id="0b912583-158c-4c14-8c43-3f781c4e9559" name="fail-function" />
+				<flow-ref doc:name="choice-subflow" doc:id="0ab190f0-5b42-4c6c-8a86-286567b03815" name="choice-subflow" />
 			</otherwise>
 		</choice>
-		<error-handler >
-			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="540d9d28-c2e4-4d1d-8a8c-aaf1cc00d15c" type="EXPRESSION">
-				<set-variable value="404" doc:name="httpStatus" doc:id="8e2cf6fa-300b-45fe-9009-cc0e86f991f4" variableName="httpStatus" />
-				<ee:transform doc:name="Transform Message" doc:id="c253b98a-607a-4b48-a53d-ef1451adee99">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-	"message" : "The request was sent from sapi"
-}]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</on-error-continue>
-		</error-handler>
-
-</flow>
-
-<!-- [STUDIO:"create-user-subflow"]	<sub-flow name="create-user-subflow" doc:id="6f0af488-68bd-4bc2-98b9-f696ea063088" >
-		<set-variable value='#["INSERT INTO user (email, firstName, lastName, manager_id, street, city, dob, updated_at)&#10;VALUES (:email, :firstName, :lastName, :manager_id, :street, :city, :dob, NOW());"&#93;' doc:name="sqlQuerry" doc:id="ac47f652-1f27-4d97-9b65-966b76a9f985" variableName="sqlQuerry" />
-		<set-variable value='#[{&#10;  "email": payload.email,&#10;  "firstName": payload.firstName,&#10;  "lastName": payload.lastName,&#10;  "manager_id": payload.manager_id,&#10;  "street": payload.address.street,&#10;  "city": payload.address.city,&#10;  "dob": payload.dob,&#10;  "updated_at": payload.updated_at&#10;}&#93;' doc:name="inputParams" doc:id="2a3cafed-6008-4999-ba99-cb4eda46fa73" variableName="inputParams"/>
-		<try doc:name="Try" doc:id="97f3473b-7e8c-4ccc-a004-409e51808a9d" >
-			<flow-ref doc:name="insertdb-subflow" doc:id="003cc3b5-23fa-46d4-9b2f-b133ed937f70" name="insertdb-subflow" />
-			<error-handler >
-				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="5b903ff6-12ff-46f0-8f66-54338d940555" type="DB:QUERY_EXECUTION">
-					<set-payload value="#[payload == false&#93;" doc:name="Set Payload == false" doc:id="969956cc-348c-4227-b346-7bdc7477fefc" />
-				</on-error-continue>
-			</error-handler>
-		</try>
-		<ee:transform doc:name="fail Function" doc:id="6800570b-6563-45a9-aec7-36a4b91c4a55" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0 
-output application/json
-import * from dw::Runtime
-fun userNotFound(message) = if(payload == false)
-fail("User Not Found")
-else
-payload
-&#45;&#45;-
-try(() ->userNotFound(payload))
-&#93;&#93;></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-		<choice doc:name="Create or Error" doc:id="ba9ac53f-cb2e-4eba-9b60-5b1dbc5c19f8">
-			<when expression="#[payload.success == true&#93;">
-				<ee:transform doc:name="set Output" doc:id="5572eea2-84da-469d-bd3a-96d59872058e">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
-&#45;&#45;-
-{
-  "message": "User Successfully Created"
-}
-&#93;&#93;></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<otherwise>
-				<ee:transform doc:name="set Output" doc:id="1e16ee69-9720-428d-87d6-06bd3c89ff6a">
+		<logger level="INFO" doc:name='Log "Flow end"' doc:id="f48e3e41-782b-4d6a-a06b-b9f172b93c9c" message="End Log HTTP-get:\users:sapi-database by Email" category="${system.groupId}.get-users-Flow.message" />
+	</sub-flow>
+	<sub-flow name="get-all-users-subflow" doc:id="e85d3457-a23d-4a65-8154-4ef1ff4d4269">
+		<set-variable value='#["SELECT * FROM 	user;"]' doc:name="sqlQuerry" doc:id="39d57062-8dff-4410-a792-89b79de69cff" variableName="sqlQuerry" />
+		<flow-ref doc:name="selectdb-subflow" doc:id="74920c5c-c3c7-430e-918a-f9ceacb0b7f5" name="selectdb-subflow" />
+		<ee:transform doc:name="output Payload" doc:id="ff0f5954-8947-4e1f-8dbf-b1a1e8167c51">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
-output application/json
-&#45;&#45;-
-{
-  "message": "User Already Exist"
-}
-&#93;&#93;></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-				<set-variable value="409" doc:name="httpStatus" doc:id="ad9935f7-3169-4410-8db2-2c80a0dd17c2" variableName="httpStatus" />
-			</otherwise>
-		</choice>
-		<logger level="INFO" doc:name='Log "Flow end"' doc:id="feb37c32-d577-44ed-bfcb-279be2b2c906" message="End Log payload HTTP-post:\users:sapi-database" category="${system.groupId}.create-user-SubFlow.message" />
-	
-</sub-flow> [STUDIO] -->
-	<flow name="get-users-flow" doc:id="71d42d93-7682-4188-ae0f-dc9498afff9a" >
-		<choice doc:name="Select by Email or Select all" doc:id="a2e66851-ae67-4ef6-91e2-83aa904a5f23" >
-			<when expression='#[attributes.queryParams."email" != null]' >
-				<set-variable value='#["select * from user where email= :email;"]' doc:name="sqlQuerry" doc:id="06831bb4-addd-4fc1-af11-13630fefe59c" variableName="sqlQuerry" />
-				<set-variable value='#[{&#10;email: attributes.queryParams."email"&#10;}]' doc:name="inputParams" doc:id="a1538147-30a8-4867-957f-03cb036aee32" variableName="inputParams"/>
-				<flow-ref doc:name="selectdb-subflow" doc:id="4e57190a-5c5f-415a-a108-cfda01dc4271" name="selectdb-subflow" />
-				<flow-ref doc:name="fail-function" doc:id="ea3dbb66-08d1-4156-ad5e-e5c17a3f61c9" name="fail-function" />
-				<flow-ref doc:name="choice-subflow" doc:id="94e7de48-d369-45d9-8ef5-603f0cea6a15" name="choice-subflow"/>
-				<logger level="INFO" doc:name='Log "Flow end"' doc:id="5563d2af-91a2-40d2-b7b5-8b346f5c270f" message="End Log HTTP-get:\users:sapi-database by Email" category="${system.groupId}.get-users-Flow.message"/>
-			</when>
-			<otherwise >
-				<set-variable value='#["SELECT * FROM 	user;"]' doc:name="sqlQuerry" doc:id="48321339-c908-40ef-b9bd-51ca0d73f2e1" variableName="sqlQuerry" />
-				<flow-ref doc:name="selectdb-subflow" doc:id="f4e9005a-dc25-4609-99fd-1c4106561853" name="selectdb-subflow" />
-				<ee:transform doc:name="output Payload" doc:id="3a845377-ed88-4669-b2ab-4b1ec23a5321">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 payload map ( payload , indexOfPayload ) -> {
@@ -136,13 +62,10 @@ payload map ( payload , indexOfPayload ) -> {
 	updated_at:payload.updated_at,
 	initials:payload.initials	
 }]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-				<logger level="INFO" doc:name='Log "Flow end"' doc:id="ed18a74b-a453-494d-8e7d-f17b6a5c9d17" message="End Log HTTP-get:\users:sapi-database" category="${system.groupId}.get-users-Flow.message"/>
-			</otherwise>
-		</choice>
-	
-</flow>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name='Log "Flow end"' doc:id="c494bda9-06fc-47d3-89bf-d537287e7e0e" message="End Log HTTP-get:\users:sapi-database" category="${system.groupId}.get-users-Flow.message" />
+	</sub-flow>
 	<sub-flow name="get-user-by-id-subflow" doc:id="7428ae48-ea28-4686-960d-8ec35d521c09" >
 		<set-variable value='#["&#10;SELECT *&#10;FROM user&#10;WHERE id = :id;&#10;"]' doc:name="sqlQuerry" doc:id="a61a5717-8909-4f6a-ad52-9434c52d74dc" variableName="sqlQuerry" />
 		<set-variable value="#[{&#10;    id: attributes.uriParams.'Id'&#10;}]" doc:name="inputParams" doc:id="e7d25846-79b9-4922-9e8f-2a75c450ae70" variableName="inputParams"/>

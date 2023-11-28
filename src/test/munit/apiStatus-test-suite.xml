@@ -46,7 +46,7 @@
 			<munit:set-event doc:name="Set Event querryParam Email" doc:id="ded4bfc1-3297-403a-95d5-f1a251d212d0" >
 				<munit:attributes value='#[readUrl("classpath://test_resources/set_input_event_email.dwl")]' />
 			</munit:set-event>
-			<flow-ref doc:name="get-users-flow" doc:id="32b48358-9af9-4c49-9610-c286a3a94c40" name="main-method" />
+			<flow-ref doc:name="get-users-flow" doc:id="32b48358-9af9-4c49-9610-c286a3a94c40" name="get-users-flow" />
 		</munit:execution>
 		<munit:validation >
 			<munit-tools:verify-call doc:name="Verify call flow-ref from Choice" doc:id="642839d3-00cf-40b0-8b9a-fd544ba771a0" processor="flow-ref" atLeast="#[1]" >

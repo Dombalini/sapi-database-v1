@@ -109,18 +109,18 @@
 			<munit:set-event doc:name="Set Event payload" doc:id="56aacef6-6470-4051-ad55-84fde93baeb5" >
 				<munit:payload value="#[payload]" />
 			</munit:set-event>
-			<flow-ref doc:name="get-users-flow" doc:id="92a7ad2c-cfd4-455c-a7b4-7b0f953d0675" name="main-method" />
+			<flow-ref doc:name="get-users-flow" doc:id="92a7ad2c-cfd4-455c-a7b4-7b0f953d0675" name="get-users-flow" />
 		</munit:execution>
 		<munit:validation >
 			<munit-tools:verify-call doc:name="Verify call ee:transform from Choice" doc:id="53393d57-0072-4f87-bcb2-c2906e007b00" processor="ee:transform" atLeast="#[1]" >
 				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="3a845377-ed88-4669-b2ab-4b1ec23a5321" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="ff0f5954-8947-4e1f-8dbf-b1a1e8167c51" attributeName="doc:id" />
 				</munit-tools:with-attributes>
 			</munit-tools:verify-call>
 			<munit-tools:assert doc:name="Assert expression payload must notBeNull()" doc:id="f5dbf02f-6f51-4900-bf64-722ceea65a05" />
 		</munit:validation>
 	</munit:test>
-	<munit:test name="post:\create-user-error-route-two-subflowtest" doc:id="fbf993c5-cd63-45d5-9fb7-48cb61ff68a3" description="Test" >
+	<munit:test name="post:\create-user-error-route-two-subflowtest" doc:id="fbf993c5-cd63-45d5-9fb7-48cb61ff68a3" description="Test">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when db:insert" doc:id="85c593ac-9b47-4833-845f-b0168fd8752d" processor="db:insert" >
 				<munit-tools:with-attributes >
