@@ -109,7 +109,7 @@
 			<munit:set-event doc:name="Set Event payload" doc:id="56aacef6-6470-4051-ad55-84fde93baeb5" >
 				<munit:payload value="#[payload]" />
 			</munit:set-event>
-			<flow-ref doc:name="get-users-flow" doc:id="92a7ad2c-cfd4-455c-a7b4-7b0f953d0675" name="get-users-flow" />
+			<flow-ref doc:name="get-users-flow" doc:id="92a7ad2c-cfd4-455c-a7b4-7b0f953d0675" name="main-method" />
 		</munit:execution>
 		<munit:validation >
 			<munit-tools:verify-call doc:name="Verify call ee:transform from Choice" doc:id="53393d57-0072-4f87-bcb2-c2906e007b00" processor="ee:transform" atLeast="#[1]" >

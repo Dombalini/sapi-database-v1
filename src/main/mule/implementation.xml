@@ -5,6 +5,50 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+<flow name="main-method" doc:id="477633dd-d232-4016-8747-5bb3d158e9e2">
+		<set-variable value='#[correlationId]' doc:name="correlationId" doc:id="e67e3b88-6fff-43d1-91b0-61e8a382f455" variableName="correlationId"/>
+		<ee:transform doc:name="request from sapi or papi">
+        <ee:message>
+            <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+if (vars.correlationId == "papi") 
+       payload
+else 
+    ("error" : "EXPRESSION")
+]]></ee:set-payload>
+        </ee:message>
+        <ee:variables>
+            <ee:set-variable variableName="httpStatus" ><![CDATA[#[if (sizeOf(payload) > 0) 200 else 404]]]></ee:set-variable>
+        </ee:variables>
+    </ee:transform>
+		<choice doc:name="Choice" doc:id="a0338691-1a35-45eb-8431-24f14cf8e1cf" >
+			<when expression='#[vars.correlationId == "papi"]'>
+				<flow-ref doc:name="Flow Reference" doc:id="11db7f96-17ae-4651-b50d-40106c7c76f1" name="get-users-flow" />
+
+			</when>
+			<otherwise>
+				<raise-error doc:name="Raise error" doc:id="9a97249f-baec-4660-9974-edf076edfca6" type="EXPRESSION"/>
+			</otherwise>
+		</choice>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="540d9d28-c2e4-4d1d-8a8c-aaf1cc00d15c" type="EXPRESSION">
+				<set-variable value="404" doc:name="httpStatus" doc:id="8e2cf6fa-300b-45fe-9009-cc0e86f991f4" variableName="httpStatus" />
+				<ee:transform doc:name="Transform Message" doc:id="c253b98a-607a-4b48-a53d-ef1451adee99">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "The request was sent from sapi"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-continue>
+		</error-handler>
+
+</flow>
+
 <!-- [STUDIO:"create-user-subflow"]	<sub-flow name="create-user-subflow" doc:id="6f0af488-68bd-4bc2-98b9-f696ea063088" >
 		<set-variable value='#["INSERT INTO user (email, firstName, lastName, manager_id, street, city, dob, updated_at)&#10;VALUES (:email, :firstName, :lastName, :manager_id, :street, :city, :dob, NOW());"&#93;' doc:name="sqlQuerry" doc:id="ac47f652-1f27-4d97-9b65-966b76a9f985" variableName="sqlQuerry" />
 		<set-variable value='#[{&#10;  "email": payload.email,&#10;  "firstName": payload.firstName,&#10;  "lastName": payload.lastName,&#10;  "manager_id": payload.manager_id,&#10;  "street": payload.address.street,&#10;  "city": payload.address.city,&#10;  "dob": payload.dob,&#10;  "updated_at": payload.updated_at&#10;}&#93;' doc:name="inputParams" doc:id="2a3cafed-6008-4999-ba99-cb4eda46fa73" variableName="inputParams"/>
@@ -97,7 +141,8 @@ payload map ( payload , indexOfPayload ) -> {
 				<logger level="INFO" doc:name='Log "Flow end"' doc:id="ed18a74b-a453-494d-8e7d-f17b6a5c9d17" message="End Log HTTP-get:\users:sapi-database" category="${system.groupId}.get-users-Flow.message"/>
 			</otherwise>
 		</choice>
-	</flow>
+	
+</flow>
 	<sub-flow name="get-user-by-id-subflow" doc:id="7428ae48-ea28-4686-960d-8ec35d521c09" >
 		<set-variable value='#["&#10;SELECT *&#10;FROM user&#10;WHERE id = :id;&#10;"]' doc:name="sqlQuerry" doc:id="a61a5717-8909-4f6a-ad52-9434c52d74dc" variableName="sqlQuerry" />
 		<set-variable value="#[{&#10;    id: attributes.uriParams.'Id'&#10;}]" doc:name="inputParams" doc:id="e7d25846-79b9-4922-9e8f-2a75c450ae70" variableName="inputParams"/>
