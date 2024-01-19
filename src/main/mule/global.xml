@@ -19,7 +19,7 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 	<configuration doc:name="Global Error Handler Configuration" doc:id="debb8bec-9ca7-452e-afb3-badc3f2df3ab" defaultErrorHandler-ref="globalErrorHandler" />
 	<configuration-properties doc:name="Log properties" doc:id="49af3598-2447-4b30-9b55-b9b934b5abef" file="properties/logProperties.yaml" />
 	<db:config name="Database_Config_User" doc:name="Database Config" doc:id="4893c14a-4bf0-45dc-a726-cf5c0955cde0" >
-		<db:my-sql-connection host="${db_config.host}" port="${db_config.port}" user="${db_config.user}" database="${db_config.db_name}" />
+		<db:my-sql-connection host="${db_config.host}" port="${db_config.port}" user="${db_config.user}" database="${db_config.db_name}" password="1234"/>
 	</db:config>
 
 </mule>

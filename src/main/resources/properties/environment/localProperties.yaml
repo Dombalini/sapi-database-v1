@@ -9,8 +9,8 @@ http:
   port: '8081'
   
 db_config:
-  host: 'localhost'
+  host: 'os0144.integrationmatters.com'
   port: '3306'
-  user: 'root'
+  user: 'domba'
   db_name: 'user'
 
